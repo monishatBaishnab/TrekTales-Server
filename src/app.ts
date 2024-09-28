@@ -1,9 +1,10 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import httpStatus from 'http-status';
 import cookieParser from 'cookie-parser';
 import notFound from './app/middlewares/notFound';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
+import { appRoutes } from './app/routes';
+import { OK } from 'http-status';
 const app: Application = express();
 
 app.use(express.json());
@@ -11,8 +12,14 @@ app.use(cookieParser());
 app.use(cors({ credentials: true, origin: ['http://localhost:3000'] }));
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('TrekTales Server Running Smoothly !');
+  res.json({
+    success: true,
+    status: OK,
+    message: 'TrekTales Server Running Smoothly !',
+  });
 });
+
+app.use('/api/v1', appRoutes);
 
 app.use(globalErrorHandler);
 

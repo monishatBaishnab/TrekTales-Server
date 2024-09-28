@@ -2,6 +2,7 @@ import { ErrorRequestHandler } from 'express';
 import httpStatus from 'http-status';
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  console.log(err);
   //setting default values
   return res.status(httpStatus.NOT_FOUND).json({
     success: false,
