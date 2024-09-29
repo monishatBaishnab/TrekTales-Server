@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { authRouter } from '../modules/auth/auth.routes';
 import { postRoutes } from '../modules/post/post.route';
+import { commentRoutes } from '../modules/comment/comment.route';
 
 const moduleRoutes = [
   {
@@ -10,6 +11,10 @@ const moduleRoutes = [
   {
     path: '/posts',
     routes: postRoutes,
+  },
+  {
+    path: '/comments',
+    routes: commentRoutes,
   },
 ];
 
