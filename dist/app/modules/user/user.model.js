@@ -39,12 +39,5 @@ UserSchema.pre('save', function (next) {
         next();
     });
 });
-UserSchema.post('save', function (doc, next) {
-    doc.password = '';
-    next();
-});
-UserSchema.post('findOne', function (doc) {
-    doc.password = '';
-});
 const User = (0, mongoose_1.model)('User', UserSchema);
 exports.default = User;

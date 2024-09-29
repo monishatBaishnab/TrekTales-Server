@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const createUserSchema = z.object({
+const registerUserSchema = z.object({
   email: z.string().email(),
   password: z.string(), // Example: Minimum 6 characters
   name: z.string().min(1),
@@ -14,5 +14,9 @@ const createUserSchema = z.object({
   interests: z.array(z.string()).optional(),
   isDeleted: z.boolean().default(false),
 });
+const loginUserSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
 
-export const userSchema = { createUserSchema };
+export const userSchema = { registerUserSchema, loginUserSchema };

@@ -7,10 +7,16 @@ const router = Router();
 
 router.post(
   '/register',
-  validateRequest(userSchema.createUserSchema),
+  validateRequest(userSchema.registerUserSchema),
   authController.register,
 );
-router.post('/login', authController.login);
+
+router.post(
+  '/login',
+  validateRequest(userSchema.loginUserSchema),
+  authController.login,
+);
+
 router.post('/change-password', authController.changePassword);
 
 export const authRouter = router;

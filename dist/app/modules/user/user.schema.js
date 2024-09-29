@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userSchema = void 0;
 const zod_1 = require("zod");
-const createUserSchema = zod_1.z.object({
+const registerUserSchema = zod_1.z.object({
     email: zod_1.z.string().email(),
     password: zod_1.z.string(), // Example: Minimum 6 characters
     name: zod_1.z.string().min(1),
@@ -16,4 +16,8 @@ const createUserSchema = zod_1.z.object({
     interests: zod_1.z.array(zod_1.z.string()).optional(),
     isDeleted: zod_1.z.boolean().default(false),
 });
-exports.userSchema = { createUserSchema };
+const loginUserSchema = zod_1.z.object({
+    email: zod_1.z.string().email(),
+    password: zod_1.z.string(),
+});
+exports.userSchema = { registerUserSchema, loginUserSchema };

@@ -33,14 +33,5 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
-UserSchema.post('save', function (doc, next) {
-  doc.password = '';
-  next();
-});
-
-UserSchema.post('findOne', function (doc) {
-  doc.password = '';
-});
-
 const User = model<TUser>('User', UserSchema);
 export default User;

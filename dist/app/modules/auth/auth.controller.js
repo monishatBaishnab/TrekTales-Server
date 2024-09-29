@@ -22,12 +22,18 @@ const register = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.OK,
         success: true,
-        message: 'User Successfully Created',
+        message: 'User Successfully Created.',
         data: user,
     });
 }));
 const login = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.json('register');
+    const user = yield auth_service_1.authService.loginIntoDB(req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.OK,
+        success: true,
+        message: 'User Successfully Logged in.',
+        data: user,
+    });
 }));
 const changePassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
 exports.authController = { register, login, changePassword };
