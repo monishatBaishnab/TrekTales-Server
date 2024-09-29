@@ -6,7 +6,9 @@ import mongoose from 'mongoose';
 let server: Server;
 
 const bootstrap = async () => {
-  await mongoose.connect(config.database_url as string);
+  await mongoose.connect(config.database_url as string, {
+    dbName: 'trek_tales',
+  });
   console.log('Database connected successfully.');
   server = app.listen(config.port, () => {
     console.log(`Server is running on port: ${config.port}`);
