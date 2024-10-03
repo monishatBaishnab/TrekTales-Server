@@ -19,6 +19,8 @@ const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const auth_service_1 = require("./auth.service");
 const register = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield auth_service_1.authService.registerIntoDB(req.body);
+    console.log(req === null || req === void 0 ? void 0 : req.file);
+    console.log(req === null || req === void 0 ? void 0 : req.body);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.OK,
         success: true,
