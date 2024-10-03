@@ -19,7 +19,7 @@ const getAllCommentsFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getCommentsByPostFromDB = async (postId: string) => {
-  const result = await Comment.find({ post: postId });
+  const result = await Comment.find({ post: postId }).populate('author');
   return result;
 };
 
@@ -53,11 +53,7 @@ const deleteCommentFromDB = async (id: string) => {
     throw new AppError(httpStatus.NOT_FOUND, 'Comment not found.');
   }
 
-  await Comment.findByIdAndUpdate(
-    id,
-    { isDeleted: true },
-    { new: true },
-  );
+  await Comment.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
   return {};
 };
 

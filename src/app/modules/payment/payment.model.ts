@@ -8,13 +8,14 @@ const PaymentSchema: Schema = new Schema<TPayment>(
     status: {
       type: String,
       enum: ['complete', 'pending', 'canceled'],
-      required: true,
+      default: 'pending',
     },
     paymentMethod: {
       type: String,
       enum: ['Aamarpay'],
-      required: true,
+      default: 'Aamarpay',
     },
+    trans_id: { type: String, required: false },
   },
   {
     timestamps: true, // Automatically manage createdAt and updatedAt

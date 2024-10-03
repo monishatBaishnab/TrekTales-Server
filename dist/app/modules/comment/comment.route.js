@@ -10,7 +10,7 @@ const validateRequest_1 = __importDefault(require("../../middlewares/validateReq
 const comment_schema_1 = require("./comment.schema");
 const router = (0, express_1.Router)();
 router.get('/', comment_controller_1.commentController.getALlComments);
-router.get('/posts/:id', comment_controller_1.commentController.getCommentsByPost);
+router.get('/posts/:postId', comment_controller_1.commentController.getCommentsByPost);
 router.post('/', (0, validateRequest_1.default)(comment_schema_1.commentSchemas.createCommentSchema), comment_controller_1.commentController.createComment);
 router.put('/:id', (0, validateRequest_1.default)(comment_schema_1.commentSchemas.updateCommentSchema), comment_controller_1.commentController.updateComment);
 router.delete('/:id', comment_controller_1.commentController.deleteComment);

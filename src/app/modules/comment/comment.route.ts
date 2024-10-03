@@ -7,7 +7,7 @@ const router = Router();
 
 router.get('/', commentController.getALlComments);
 
-router.get('/posts/:id', commentController.getCommentsByPost);
+router.get('/posts/:postId', commentController.getCommentsByPost);
 
 router.post(
   '/',

@@ -5,6 +5,7 @@ const express_1 = require("express");
 const auth_routes_1 = require("../modules/auth/auth.routes");
 const post_route_1 = require("../modules/post/post.route");
 const comment_route_1 = require("../modules/comment/comment.route");
+const payment_route_1 = require("../modules/payment/payment.route");
 const moduleRoutes = [
     {
         path: '/auth',
@@ -17,6 +18,10 @@ const moduleRoutes = [
     {
         path: '/comments',
         routes: comment_route_1.commentRoutes,
+    },
+    {
+        path: '/payments',
+        routes: payment_route_1.paymentRoutes,
     },
 ];
 const router = (0, express_1.Router)();

@@ -27,7 +27,7 @@ const getAllCommentsFromDB = (query) => __awaiter(void 0, void 0, void 0, functi
     return result;
 });
 const getCommentsByPostFromDB = (postId) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield comment_model_1.default.find({ post: postId });
+    const result = yield comment_model_1.default.find({ post: postId }).populate('author');
     return result;
 });
 const createCommentIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
