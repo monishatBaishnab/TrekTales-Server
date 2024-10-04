@@ -1,1 +1,13 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.userRoutes = void 0;
+const express_1 = require("express");
+const user_controller_1 = require("./user.controller");
+const multer_config_1 = require("../../config/multer.config");
+const router = (0, express_1.Router)();
+router.put('/:id', multer_config_1.multerUpload.single('image'), user_controller_1.userController.updateUser);
+router.get('/', user_controller_1.userController.getAllUsers);
+router.get('/authors', user_controller_1.userController.getAllAuthors);
+router.get('/popular-authors', user_controller_1.userController.getPopularUsers);
+router.get('/:id', user_controller_1.userController.getSingleUser);
+exports.userRoutes = router;

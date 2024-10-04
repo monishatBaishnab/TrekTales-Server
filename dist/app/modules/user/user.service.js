@@ -1,1 +1,101 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.userServices = void 0;
+const http_status_1 = __importDefault(require("http-status"));
+const AppError_1 = __importDefault(require("../../errors/AppError"));
+const user_model_1 = __importDefault(require("./user.model"));
+const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
+const updateUserDB = (id, payload, file) => __awaiter(void 0, void 0, void 0, function* () {
+    const findUser = yield user_model_1.default.findById(id);
+    if (!findUser) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found.');
+    }
+    if ((findUser === null || findUser === void 0 ? void 0 : findUser.isBlocked) || (findUser === null || findUser === void 0 ? void 0 : findUser.isDeleted)) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found.');
+    }
+    const data = JSON.parse(payload);
+    const deleteAbleFields = ['isVerified', 'isBlocked', 'isDeleted', 'role'];
+    deleteAbleFields === null || deleteAbleFields === void 0 ? void 0 : deleteAbleFields.map((field) => data === null || data === void 0 ? true : delete data[field]);
+    const userData = Object.assign(Object.assign({}, data), { profilePicture: file ? file.path : findUser === null || findUser === void 0 ? void 0 : findUser.profilePicture });
+    const result = yield user_model_1.default.findByIdAndUpdate({ _id: id }, userData, {
+        new: true,
+    });
+    return result;
+});
+const getAllUsersDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const userQuery = new QueryBuilder_1.default(user_model_1.default.find().select('-password'), query);
+    const result = yield userQuery.modelQuery;
+    return result;
+});
+const getAllAuthorsDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const userQuery = new QueryBuilder_1.default(user_model_1.default.find({ role: { $ne: 'admin' } }).select('-role -isDeleted -password -isBlocked'), query);
+    const result = yield userQuery.modelQuery;
+    return result;
+});
+const getPopularUsersDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.default.aggregate([
+        {
+            $match: {
+                role: { $ne: 'admin' },
+            },
+        },
+        {
+            $lookup: {
+                from: 'posts',
+                localField: '_id',
+                foreignField: 'author',
+                as: 'posts',
+            },
+        },
+        {
+            $addFields: {
+                totalUpvotes: { $sum: '$posts.upvotes' },
+            },
+        },
+        {
+            $sort: { totalUpvotes: -1 },
+        },
+        {
+            $limit: 3,
+        },
+        {
+            $project: {
+                posts: 0,
+                role: 0,
+                isDeleted: 0,
+                password: 0,
+                isBlocked: 0,
+            },
+        },
+    ]);
+    return result;
+});
+const getSingleUserDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.default.findById(id);
+    if (!result) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found.');
+    }
+    if ((result === null || result === void 0 ? void 0 : result.isBlocked) || (result === null || result === void 0 ? void 0 : result.isDeleted)) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found.');
+    }
+    return result;
+});
+exports.userServices = {
+    updateUserDB,
+    getAllUsersDB,
+    getAllAuthorsDB,
+    getPopularUsersDB,
+    getSingleUserDB,
+};
