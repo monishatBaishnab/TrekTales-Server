@@ -16,14 +16,6 @@ const registerUserSchema = zod_1.z.object({
     interests: zod_1.z.array(zod_1.z.string()).optional(),
     isDeleted: zod_1.z.boolean().default(false),
 });
-const fileSchema = zod_1.z.object({
-    fieldname: zod_1.z.string(), // The name of the form field
-    originalname: zod_1.z.string(), // The original name of the file
-    encoding: zod_1.z.string(), // The encoding type of the file
-    mimetype: zod_1.z.enum(['image/jpeg', 'image/png']), // Ensure the file is an image (JPG or PNG)
-    size: zod_1.z.number().max(5 * 1024 * 1024), // Max size of 5MB
-    buffer: zod_1.z.instanceof(Buffer), // The file content
-});
 const updateUserSchema = zod_1.z.object({
     name: zod_1.z.string().min(1).optional(),
     bio: zod_1.z.string().optional().optional(),

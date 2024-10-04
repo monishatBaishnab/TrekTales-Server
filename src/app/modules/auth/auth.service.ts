@@ -8,27 +8,27 @@ import bcrypt from 'bcrypt';
 
 const registerIntoDB = async (payload: TUser) => {
   //check user already exists or not
-  // const existsUser = await User.findOne({ email: payload?.email });
-  // if (existsUser) {
-  //   throw new AppError(httpStatus.CONFLICT, 'User already exists.');
-  // }
-  // console.log(payload);
-  // //create new user
-  // const newUser = await User.create(payload);
-  // if (!newUser) {
-  //   throw new AppError(BAD_REQUEST, 'User creation failed.');
-  // }
+  const existsUser = await User.findOne({ email: payload?.email });
+  if (existsUser) {
+    throw new AppError(httpStatus.CONFLICT, 'User already exists.');
+  }
+  console.log(payload);
+  //create new user
+  const newUser = await User.create(payload);
+  if (!newUser) {
+    throw new AppError(BAD_REQUEST, 'User creation failed.');
+  }
 
-  // //create user token
-  // const token = jwt.sign(
-  //   { email: newUser?.email, role: newUser?.role, _id: newUser?._id },
-  //   config.jwt_access_secret as string,
-  //   {
-  //     expiresIn: config.jwt_access_expires_in,
-  //   },
-  // );
-  // //return the generated token
-  // return { token };
+  //create user token
+  const token = jwt.sign(
+    { email: newUser?.email, role: newUser?.role, _id: newUser?._id },
+    config.jwt_access_secret as string,
+    {
+      expiresIn: config.jwt_access_expires_in,
+    },
+  );
+  //return the generated token
+  return { token };
   return {};
 };
 

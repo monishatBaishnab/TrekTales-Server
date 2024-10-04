@@ -15,14 +15,6 @@ const registerUserSchema = z.object({
   isDeleted: z.boolean().default(false),
 });
 
-const fileSchema = z.object({
-  fieldname: z.string(), // The name of the form field
-  originalname: z.string(), // The original name of the file
-  encoding: z.string(), // The encoding type of the file
-  mimetype: z.enum(['image/jpeg', 'image/png']), // Ensure the file is an image (JPG or PNG)
-  size: z.number().max(5 * 1024 * 1024), // Max size of 5MB
-  buffer: z.instanceof(Buffer), // The file content
-});
 
 const updateUserSchema = z.object({
   name: z.string().min(1).optional(),
