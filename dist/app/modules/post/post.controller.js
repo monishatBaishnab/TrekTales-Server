@@ -65,10 +65,42 @@ const deletePost = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         data: deletedPost,
     });
 }));
+const getStates = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const states = yield post_service_1.postService.getTodayStates();
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Post Deleted Successfully.',
+        data: states,
+    });
+}));
+const createUpVote = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const states = yield post_service_1.postService.createUpVoteIntoDB((_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.id, req === null || req === void 0 ? void 0 : req.body);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Post Upvoted Successfully.',
+        data: states,
+    });
+}));
+const createDownVote = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const states = yield post_service_1.postService.createDownVoteIntoDB((_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.id, req === null || req === void 0 ? void 0 : req.body);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Post Downvoted Successfully.',
+        data: states,
+    });
+}));
 exports.postController = {
     getAllPost,
     getSinglePost,
     createPost,
     updatePost,
     deletePost,
+    getStates,
+    createUpVote,
+    createDownVote,
 };

@@ -12,6 +12,8 @@ router.put(
 
 router.get('/', userController.getAllUsers);
 
+router.get('/authors/:id', userController.getSingleAuthor);
+
 router.get('/authors', userController.getAllAuthors);
 
 router.get('/popular-authors', userController.getPopularUsers);

@@ -61,10 +61,46 @@ const deletePost = catchAsync(async (req, res) => {
   });
 });
 
+const getStates = catchAsync(async (req, res) => {
+  const states = await postService.getTodayStates();
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Post Deleted Successfully.',
+    data: states,
+  });
+});
+
+const createUpVote = catchAsync(async (req, res) => {
+  const states = await postService.createUpVoteIntoDB(req?.params?.id, req?.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Post Upvoted Successfully.',
+    data: states,
+  });
+});
+
+const createDownVote = catchAsync(async (req, res) => {
+  const states = await postService.createDownVoteIntoDB(req?.params?.id, req?.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Post Downvoted Successfully.',
+    data: states,
+  });
+});
+
 export const postController = {
   getAllPost,
   getSinglePost,
   createPost,
   updatePost,
   deletePost,
+  getStates,
+  createUpVote,
+  createDownVote,
 };

@@ -37,12 +37,22 @@ const getAllUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
     });
 }));
 const getAllAuthors = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_service_1.userServices.getPopularUsersDB(req.query);
+    const result = yield user_service_1.userServices.getAllAuthorsDB(req.query);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
         data: result,
         message: 'Authors retrieved successfully.',
+    });
+}));
+const getSingleAuthor = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const result = yield user_service_1.userServices.getSingleAuthorDB((_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.id);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        data: result,
+        message: 'Author retrieved successfully.',
     });
 }));
 const getPopularUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -70,4 +80,5 @@ exports.userController = {
     getPopularUsers,
     getSingleUser,
     getAllAuthors,
+    getSingleAuthor,
 };

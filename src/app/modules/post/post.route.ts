@@ -21,6 +21,18 @@ router.put(
   postController.updatePost,
 );
 
-router.delete('/:id', postController.deletePost);
+router.put(
+  '/:id/upvote',
+  postController.createUpVote,
+);
+
+router.put(
+  '/:id/downvote',
+  postController.createDownVote,
+);
+
+router.delete('/:id', postController.createUpVote);
+
+router.get('/states/all', postController.createDownVote);
 
 export const postRoutes = router;

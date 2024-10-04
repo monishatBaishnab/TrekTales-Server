@@ -4,7 +4,11 @@ import sendResponse from '../../utils/sendResponse';
 import { userServices } from './user.service';
 
 const updateUser = catchAsync(async (req, res) => {
-  const result = await userServices.updateUserDB(req?.params?.id, req?.body?.data, req?.file);
+  const result = await userServices.updateUserDB(
+    req?.params?.id,
+    req?.body?.data,
+    req?.file,
+  );
 
   sendResponse(res, {
     success: true,
@@ -26,13 +30,24 @@ const getAllUsers = catchAsync(async (req, res) => {
 });
 
 const getAllAuthors = catchAsync(async (req, res) => {
-  const result = await userServices.getPopularUsersDB(req.query);
+  const result = await userServices.getAllAuthorsDB(req.query);
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
     data: result,
     message: 'Authors retrieved successfully.',
+  });
+});
+
+const getSingleAuthor = catchAsync(async (req, res) => {
+  const result = await userServices.getSingleAuthorDB(req?.params?.id);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    data: result,
+    message: 'Author retrieved successfully.',
   });
 });
 
@@ -64,4 +79,5 @@ export const userController = {
   getPopularUsers,
   getSingleUser,
   getAllAuthors,
+  getSingleAuthor,
 };

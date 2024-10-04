@@ -1,4 +1,6 @@
-import { Schema } from "mongoose";
+import { Schema } from 'mongoose';
+
+type TVote = { vote: 'up' | 'down'; user: string }[];
 
 export type TPost = {
   author: Schema.Types.ObjectId; // User reference (ObjectId)
@@ -8,8 +10,7 @@ export type TPost = {
   category: string;
   tags?: string[];
   isPremium: boolean;
-  upvotes: number;
-  downvotes: number;
+  votes: TVote;
   isDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;

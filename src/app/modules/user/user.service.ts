@@ -3,6 +3,7 @@ import AppError from '../../errors/AppError';
 import User from './user.model';
 import { TUser } from './user.types';
 import QueryBuilder from '../../builder/QueryBuilder';
+import Post from '../post/posts.model';
 
 const updateUserDB = async (
   id: string,
@@ -52,6 +53,16 @@ const getAllAuthorsDB = async (query: Record<string, unknown>) => {
   return result;
 };
 
+const getSingleAuthorDB = async (id: string) => {
+  const author = await User.findById(id).select(
+    '-role -isDeleted -password -isBlocked',
+  );
+
+  const posts = await Post.find({ author: id });
+
+  return { author, posts };
+};
+
 const getPopularUsersDB = async () => {
   const result = await User.aggregate([
     {
@@ -92,7 +103,7 @@ const getPopularUsersDB = async () => {
 };
 
 const getSingleUserDB = async (id: string) => {
-  const result = await User.findById(id);
+  const result = await User.findById(id).select('-password');
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found.');
   }
@@ -108,4 +119,5 @@ export const userServices = {
   getAllAuthorsDB,
   getPopularUsersDB,
   getSingleUserDB,
+  getSingleAuthorDB,
 };

@@ -24,6 +24,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
+const VoteSchema = new mongoose_1.Schema({
+    vote: { type: String, enum: ['up', 'down'], required: true },
+    user: { type: String, required: true },
+}, { _id: false });
 const PostSchema = new mongoose_1.Schema({
     author: { type: mongoose_1.default.Types.ObjectId, ref: 'User', required: true },
     title: { type: String, required: true },
@@ -32,8 +36,7 @@ const PostSchema = new mongoose_1.Schema({
     category: { type: String, required: true },
     tags: { type: [String], default: [] },
     isPremium: { type: Boolean, default: false },
-    upvotes: { type: Number, default: 0 },
-    downvotes: { type: Number, default: 0 },
+    votes: { type: [VoteSchema], required: false },
     isDeleted: { type: Boolean, default: false },
 }, {
     timestamps: true,

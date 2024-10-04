@@ -17,6 +17,7 @@ const http_status_1 = __importDefault(require("http-status"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const user_model_1 = __importDefault(require("./user.model"));
 const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
+const posts_model_1 = __importDefault(require("../post/posts.model"));
 const updateUserDB = (id, payload, file) => __awaiter(void 0, void 0, void 0, function* () {
     const findUser = yield user_model_1.default.findById(id);
     if (!findUser) {
@@ -43,6 +44,11 @@ const getAllAuthorsDB = (query) => __awaiter(void 0, void 0, void 0, function* (
     const userQuery = new QueryBuilder_1.default(user_model_1.default.find({ role: { $ne: 'admin' } }).select('-role -isDeleted -password -isBlocked'), query);
     const result = yield userQuery.modelQuery;
     return result;
+});
+const getSingleAuthorDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const author = yield user_model_1.default.findById(id).select('-role -isDeleted -password -isBlocked');
+    const posts = yield posts_model_1.default.find({ author: id });
+    return { author, posts };
 });
 const getPopularUsersDB = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.default.aggregate([
@@ -83,7 +89,7 @@ const getPopularUsersDB = () => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getSingleUserDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.default.findById(id);
+    const result = yield user_model_1.default.findById(id).select('-password');
     if (!result) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found.');
     }
@@ -98,4 +104,5 @@ exports.userServices = {
     getAllAuthorsDB,
     getPopularUsersDB,
     getSingleUserDB,
+    getSingleAuthorDB,
 };

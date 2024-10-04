@@ -1,6 +1,14 @@
 import mongoose, { Schema } from 'mongoose';
 import { TPost } from './post.types';
 
+const VoteSchema: Schema = new Schema(
+  {
+    vote: { type: String, enum: ['up', 'down'], required: true },
+    user: { type: String, required: true },
+  },
+  { _id: false },
+);
+
 const PostSchema: Schema = new Schema<TPost>(
   {
     author: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
@@ -10,8 +18,7 @@ const PostSchema: Schema = new Schema<TPost>(
     category: { type: String, required: true },
     tags: { type: [String], default: [] },
     isPremium: { type: Boolean, default: false },
-    upvotes: { type: Number, default: 0 },
-    downvotes: { type: Number, default: 0 },
+    votes: { type: [VoteSchema], required: false },
     isDeleted: { type: Boolean, default: false },
   },
   {
