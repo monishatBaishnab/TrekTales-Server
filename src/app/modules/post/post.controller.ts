@@ -27,8 +27,7 @@ const getSinglePost = catchAsync(async (req, res) => {
 });
 
 const createPost = catchAsync(async (req, res) => {
-  const newPost = await postService.createPostIntoDB(req?.body);
-
+  const newPost = await postService.createPostIntoDB(req?.body, req?.file?.path);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -39,7 +38,7 @@ const createPost = catchAsync(async (req, res) => {
 
 const updatePost = catchAsync(async (req, res) => {
   const { id } = req?.params;
-  const updatedPost = await postService.updatePostFromDB(id, req?.body);
+  const updatedPost = await postService.updatePostFromDB(id, req?.body, req?.file?.path);
 
   sendResponse(res, {
     success: true,
@@ -73,7 +72,10 @@ const getStates = catchAsync(async (req, res) => {
 });
 
 const createUpVote = catchAsync(async (req, res) => {
-  const states = await postService.createUpVoteIntoDB(req?.params?.id, req?.body);
+  const states = await postService.createUpVoteIntoDB(
+    req?.params?.id,
+    req?.body,
+  );
 
   sendResponse(res, {
     success: true,
@@ -84,7 +86,10 @@ const createUpVote = catchAsync(async (req, res) => {
 });
 
 const createDownVote = catchAsync(async (req, res) => {
-  const states = await postService.createDownVoteIntoDB(req?.params?.id, req?.body);
+  const states = await postService.createDownVoteIntoDB(
+    req?.params?.id,
+    req?.body,
+  );
 
   sendResponse(res, {
     success: true,

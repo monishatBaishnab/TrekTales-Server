@@ -25,22 +25,22 @@ const fileSchema = zod_1.z.object({
     buffer: zod_1.z.instanceof(Buffer), // The file content
 });
 const updateUserSchema = zod_1.z.object({
-    data: zod_1.z.object({
-        name: zod_1.z.string().min(1).optional(),
-        bio: zod_1.z.string().optional().optional(),
-        profilePicture: zod_1.z.string().optional(),
-        role: zod_1.z.enum(['user', 'admin']).optional(),
-        isVerified: zod_1.z.boolean().default(false).optional(),
-        isBlocked: zod_1.z.boolean().default(false).optional(),
-        socialLinks: zod_1.z.record(zod_1.z.string()).optional(),
-        dateOfBirth: zod_1.z.string().optional(),
-        interests: zod_1.z.array(zod_1.z.string()).optional(),
-        isDeleted: zod_1.z.boolean().default(false).optional(),
-    }),
-    image: fileSchema,
+    name: zod_1.z.string().min(1).optional(),
+    bio: zod_1.z.string().optional().optional(),
+    role: zod_1.z.enum(['user', 'admin']).optional(),
+    isVerified: zod_1.z.boolean().default(false).optional(),
+    isBlocked: zod_1.z.boolean().default(false).optional(),
+    socialLinks: zod_1.z.record(zod_1.z.string()).optional(),
+    dateOfBirth: zod_1.z.string().optional(),
+    interests: zod_1.z.array(zod_1.z.string()).optional(),
+    isDeleted: zod_1.z.boolean().default(false).optional(),
 });
 const loginUserSchema = zod_1.z.object({
     email: zod_1.z.string().email(),
     password: zod_1.z.string(),
 });
-exports.userSchema = { registerUserSchema, loginUserSchema, updateUserSchema };
+exports.userSchema = {
+    registerUserSchema,
+    loginUserSchema,
+    updateUserSchema,
+};

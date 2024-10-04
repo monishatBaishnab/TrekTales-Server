@@ -34,16 +34,16 @@ const getSinglePostFromDB = (id) => __awaiter(void 0, void 0, void 0, function* 
     const result = yield posts_model_1.default.findById(id).populate('author');
     return result;
 });
-const createPostIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+const createPostIntoDB = (payload, image) => __awaiter(void 0, void 0, void 0, function* () {
     const findAuthor = yield user_model_1.default.findById({ _id: payload === null || payload === void 0 ? void 0 : payload.author });
     if (!findAuthor) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Author not found.');
     }
-    const postData = Object.assign(Object.assign({}, payload), { upvotes: 0, downvotes: 0, isDeleted: false });
+    const postData = Object.assign(Object.assign({}, payload), { image: image ? image : '', upvotes: 0, downvotes: 0, isDeleted: false });
     const result = yield posts_model_1.default.create(postData);
     return result;
 });
-const updatePostFromDB = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+const updatePostFromDB = (id, payload, image) => __awaiter(void 0, void 0, void 0, function* () {
     const findPost = yield posts_model_1.default.findById(id);
     if (!findPost) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Post not found.');
@@ -51,7 +51,7 @@ const updatePostFromDB = (id, payload) => __awaiter(void 0, void 0, void 0, func
     if (findPost.isDeleted) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Post not found.');
     }
-    const result = yield posts_model_1.default.findByIdAndUpdate(id, payload, { new: true });
+    const result = yield posts_model_1.default.findByIdAndUpdate(id, Object.assign(Object.assign({}, payload), { image: image ? image : findPost === null || findPost === void 0 ? void 0 : findPost.image }), { new: true });
     return result;
 });
 const deletePostsFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {

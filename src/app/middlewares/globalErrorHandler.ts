@@ -6,13 +6,13 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   const statusCode = err?.statusCode ?? INTERNAL_SERVER_ERROR;
   const message = 'Something want wrong';
   const error = err?.message ?? '';
-  console.log(err);
+
   //setting default values
   return res.status(statusCode).json({
     success,
     statusCode,
     message,
-    error,
+    error: error,
   });
 };
 

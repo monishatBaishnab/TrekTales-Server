@@ -5,7 +5,7 @@ type TVote = { vote: 'up' | 'down'; user: string }[];
 export type TPost = {
   author: Schema.Types.ObjectId; // User reference (ObjectId)
   title: string;
-  images?: string[];
+  image?: string;
   content: string;
   category: string;
   tags?: string[];

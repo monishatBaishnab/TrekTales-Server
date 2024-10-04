@@ -1,11 +1,17 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userRoutes = void 0;
 const express_1 = require("express");
 const user_controller_1 = require("./user.controller");
 const multer_config_1 = require("../../config/multer.config");
+const parseBody_1 = require("../../middlewares/parseBody");
+const validateRequest_1 = __importDefault(require("../../middlewares/validateRequest"));
+const user_schema_1 = require("./user.schema");
 const router = (0, express_1.Router)();
-router.put('/:id', multer_config_1.multerUpload.single('image'), user_controller_1.userController.updateUser);
+router.put('/:id', multer_config_1.multerUpload.single('image'), parseBody_1.parseBody, (0, validateRequest_1.default)(user_schema_1.userSchema.updateUserSchema), user_controller_1.userController.updateUser);
 router.get('/', user_controller_1.userController.getAllUsers);
 router.get('/authors/:id', user_controller_1.userController.getSingleAuthor);
 router.get('/authors', user_controller_1.userController.getAllAuthors);

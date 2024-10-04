@@ -37,7 +37,8 @@ const getSinglePost = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     });
 }));
 const createPost = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newPost = yield post_service_1.postService.createPostIntoDB(req === null || req === void 0 ? void 0 : req.body);
+    var _a;
+    const newPost = yield post_service_1.postService.createPostIntoDB(req === null || req === void 0 ? void 0 : req.body, (_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.path);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
@@ -46,8 +47,9 @@ const createPost = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     });
 }));
 const updatePost = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const { id } = req === null || req === void 0 ? void 0 : req.params;
-    const updatedPost = yield post_service_1.postService.updatePostFromDB(id, req === null || req === void 0 ? void 0 : req.body);
+    const updatedPost = yield post_service_1.postService.updatePostFromDB(id, req === null || req === void 0 ? void 0 : req.body, (_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.path);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,

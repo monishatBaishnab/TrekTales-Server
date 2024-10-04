@@ -10,20 +10,18 @@ const VoteSchema = z.object({
 
 const createPostSchema = z.object({
   author: z.string(),
-  title: z.string().min(1),
-  images: z.array(z.string()),
-  content: z.string().min(1),
-  category: z.string().min(1),
-  tags: z.array(z.string()).optional(),
-  isPremium: z.boolean().default(false),
+  title: z.string(),
+  content: z.string(),
+  category: z.string(),
+  tags: z.array(z.string()),
+  isPremium: z.boolean().default(false).optional(),
   votes: z.array(VoteSchema).optional(),
-  isDeleted: z.boolean().default(false),
+  isDeleted: z.boolean().default(false).optional(),
 });
 
 const updatePostSchema = z.object({
   author: z.string().optional(),
   title: z.string().min(1).optional(),
-  images: z.array(z.string()).optional(),
   content: z.string().min(1).optional(),
   category: z.string().min(1).optional(),
   tags: z.array(z.string()).optional(),

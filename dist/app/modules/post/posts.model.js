@@ -31,7 +31,7 @@ const VoteSchema = new mongoose_1.Schema({
 const PostSchema = new mongoose_1.Schema({
     author: { type: mongoose_1.default.Types.ObjectId, ref: 'User', required: true },
     title: { type: String, required: true },
-    images: { type: [String], default: [] },
+    image: { type: String, required: true },
     content: { type: String, required: true },
     category: { type: String, required: true },
     tags: { type: [String], default: [] },

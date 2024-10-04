@@ -25,7 +25,7 @@ const getSinglePostFromDB = async (id: string) => {
   return result;
 };
 
-const createPostIntoDB = async (payload: TPost) => {
+const createPostIntoDB = async (payload: TPost, image: string|undefined) => {
   const findAuthor = await User.findById({ _id: payload?.author });
   if (!findAuthor) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Author not found.');
@@ -33,6 +33,7 @@ const createPostIntoDB = async (payload: TPost) => {
 
   const postData = {
     ...payload,
+    image: image ? image : '',
     upvotes: 0,
     downvotes: 0,
     isDeleted: false,
@@ -42,7 +43,11 @@ const createPostIntoDB = async (payload: TPost) => {
   return result;
 };
 
-const updatePostFromDB = async (id: string, payload: Partial<TPost>) => {
+const updatePostFromDB = async (
+  id: string,
+  payload: Partial<TPost>,
+  image: string | undefined,
+) => {
   const findPost = await Post.findById(id);
   if (!findPost) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Post not found.');
@@ -52,7 +57,11 @@ const updatePostFromDB = async (id: string, payload: Partial<TPost>) => {
     throw new AppError(httpStatus.BAD_REQUEST, 'Post not found.');
   }
 
-  const result = await Post.findByIdAndUpdate(id, payload, { new: true });
+  const result = await Post.findByIdAndUpdate(
+    id,
+    { ...payload, image: image ? image : findPost?.image },
+    { new: true },
+  );
   return result;
 };
 
