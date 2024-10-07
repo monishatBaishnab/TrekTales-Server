@@ -4,9 +4,10 @@ import sendResponse from '../../utils/sendResponse';
 import { authService } from './auth.service';
 
 const register = catchAsync(async (req, res) => {
-  const user = await authService.registerIntoDB(req.body);
-  console.log(req?.file);
-  console.log(req?.body);
+  const user = await authService.registerIntoDB({
+    ...req?.body,
+    profilePicture: req?.file?.path ?? '',
+  });
   sendResponse(res, {
     statusCode: OK,
     success: true,
@@ -16,7 +17,7 @@ const register = catchAsync(async (req, res) => {
 });
 const login = catchAsync(async (req, res) => {
   const user = await authService.loginIntoDB(req.body);
-
+  console.log(req.body);
   sendResponse(res, {
     statusCode: OK,
     success: true,

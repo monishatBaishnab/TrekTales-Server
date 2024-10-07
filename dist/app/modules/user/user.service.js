@@ -19,6 +19,7 @@ const user_model_1 = __importDefault(require("./user.model"));
 const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
 const posts_model_1 = __importDefault(require("../post/posts.model"));
 const updateUserDB = (id, payload, file) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(payload, 'from user service');
     const findUser = yield user_model_1.default.findById(id);
     if (!findUser) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found.');
@@ -26,10 +27,14 @@ const updateUserDB = (id, payload, file) => __awaiter(void 0, void 0, void 0, fu
     if ((findUser === null || findUser === void 0 ? void 0 : findUser.isBlocked) || (findUser === null || findUser === void 0 ? void 0 : findUser.isDeleted)) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found.');
     }
-    const data = JSON.parse(payload);
-    const deleteAbleFields = ['isVerified', 'isBlocked', 'isDeleted', 'role'];
-    deleteAbleFields === null || deleteAbleFields === void 0 ? void 0 : deleteAbleFields.map((field) => data === null || data === void 0 ? true : delete data[field]);
-    const userData = Object.assign(Object.assign({}, data), { profilePicture: file ? file.path : findUser === null || findUser === void 0 ? void 0 : findUser.profilePicture });
+    const deleteAbleFields = [
+        'isVerified',
+        'isBlocked',
+        'isDeleted',
+        'role',
+    ];
+    deleteAbleFields === null || deleteAbleFields === void 0 ? void 0 : deleteAbleFields.map((field) => payload === null || payload === void 0 ? true : delete payload[field]);
+    const userData = Object.assign(Object.assign({}, payload), { profilePicture: file ? file.path : findUser === null || findUser === void 0 ? void 0 : findUser.profilePicture });
     const result = yield user_model_1.default.findByIdAndUpdate({ _id: id }, userData, {
         new: true,
     });
@@ -42,8 +47,9 @@ const getAllUsersDB = (query) => __awaiter(void 0, void 0, void 0, function* () 
 });
 const getAllAuthorsDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const userQuery = new QueryBuilder_1.default(user_model_1.default.find({ role: { $ne: 'admin' } }).select('-role -isDeleted -password -isBlocked'), query);
-    const result = yield userQuery.modelQuery;
-    return result;
+    const authors = yield userQuery.modelQuery;
+    const meta = yield userQuery.countTotal();
+    return { authors, meta };
 });
 const getSingleAuthorDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const author = yield user_model_1.default.findById(id).select('-role -isDeleted -password -isBlocked');
@@ -89,6 +95,7 @@ const getPopularUsersDB = () => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getSingleUserDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(id);
     const result = yield user_model_1.default.findById(id).select('-password');
     if (!result) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found.');

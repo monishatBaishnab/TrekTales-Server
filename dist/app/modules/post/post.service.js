@@ -27,8 +27,9 @@ const getAllPostFromDB = (query) => __awaiter(void 0, void 0, void 0, function* 
         .sort()
         .paginate()
         .fields();
-    const result = yield postQuery.modelQuery;
-    return result;
+    const posts = yield postQuery.modelQuery;
+    const meta = yield postQuery.countTotal();
+    return { posts, meta };
 });
 const getSinglePostFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield posts_model_1.default.findById(id).populate('author');
@@ -39,7 +40,7 @@ const createPostIntoDB = (payload, image) => __awaiter(void 0, void 0, void 0, f
     if (!findAuthor) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Author not found.');
     }
-    const postData = Object.assign(Object.assign({}, payload), { image: image ? image : '', upvotes: 0, downvotes: 0, isDeleted: false });
+    const postData = Object.assign(Object.assign({}, payload), { image: image ? image : '', upvotes: 0, downvotes: 0, isDeleted: false, isFeatured: false });
     const result = yield posts_model_1.default.create(postData);
     return result;
 });

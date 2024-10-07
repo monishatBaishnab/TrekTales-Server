@@ -19,6 +19,7 @@ const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const post_service_1 = require("./post.service");
 const getAllPost = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const posts = yield post_service_1.postService.getAllPostFromDB(req === null || req === void 0 ? void 0 : req.query);
+    console.log(req === null || req === void 0 ? void 0 : req.query);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,

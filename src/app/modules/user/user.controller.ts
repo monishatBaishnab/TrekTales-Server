@@ -6,7 +6,7 @@ import { userServices } from './user.service';
 const updateUser = catchAsync(async (req, res) => {
   const result = await userServices.updateUserDB(
     req?.params?.id,
-    req?.body?.data,
+    req?.body,
     req?.file,
   );
 

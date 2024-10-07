@@ -5,7 +5,7 @@ import { postService } from './post.service';
 
 const getAllPost = catchAsync(async (req, res) => {
   const posts = await postService.getAllPostFromDB(req?.query);
-
+  console.log(req?.query);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -27,7 +27,10 @@ const getSinglePost = catchAsync(async (req, res) => {
 });
 
 const createPost = catchAsync(async (req, res) => {
-  const newPost = await postService.createPostIntoDB(req?.body, req?.file?.path);
+  const newPost = await postService.createPostIntoDB(
+    req?.body,
+    req?.file?.path,
+  );
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -38,7 +41,11 @@ const createPost = catchAsync(async (req, res) => {
 
 const updatePost = catchAsync(async (req, res) => {
   const { id } = req?.params;
-  const updatedPost = await postService.updatePostFromDB(id, req?.body, req?.file?.path);
+  const updatedPost = await postService.updatePostFromDB(
+    id,
+    req?.body,
+    req?.file?.path,
+  );
 
   sendResponse(res, {
     success: true,

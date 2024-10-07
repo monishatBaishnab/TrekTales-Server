@@ -15,9 +15,9 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
     .paginate()
     .fields();
 
-  const result = await postQuery.modelQuery;
-
-  return result;
+  const posts = await postQuery.modelQuery;
+  const meta = await postQuery.countTotal();
+  return { posts, meta };
 };
 
 const getSinglePostFromDB = async (id: string) => {
@@ -25,7 +25,7 @@ const getSinglePostFromDB = async (id: string) => {
   return result;
 };
 
-const createPostIntoDB = async (payload: TPost, image: string|undefined) => {
+const createPostIntoDB = async (payload: TPost, image: string | undefined) => {
   const findAuthor = await User.findById({ _id: payload?.author });
   if (!findAuthor) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Author not found.');
@@ -37,6 +37,7 @@ const createPostIntoDB = async (payload: TPost, image: string|undefined) => {
     upvotes: 0,
     downvotes: 0,
     isDeleted: false,
+    isFeatured: false,
   };
 
   const result = await Post.create(postData);

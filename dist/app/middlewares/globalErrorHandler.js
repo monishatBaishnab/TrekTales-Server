@@ -7,6 +7,7 @@ const globalErrorHandler = (err, req, res, next) => {
     const statusCode = (_a = err === null || err === void 0 ? void 0 : err.statusCode) !== null && _a !== void 0 ? _a : http_status_1.INTERNAL_SERVER_ERROR;
     const message = 'Something want wrong';
     const error = (_b = err === null || err === void 0 ? void 0 : err.message) !== null && _b !== void 0 ? _b : '';
+    console.log(err);
     //setting default values
     return res.status(statusCode).json({
         success,

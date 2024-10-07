@@ -4,19 +4,22 @@ import validateRequest from '../../middlewares/validateRequest';
 import { userSchema } from '../user/user.schema';
 import auth from '../../middlewares/auth';
 import { USER_ROLE } from '../user/user.constants';
+import { parseBody } from '../../middlewares/parseBody';
+import { multerUpload } from '../../config/multer.config';
 
 const router = Router();
 
 router.post(
   '/register',
+  multerUpload.single('image'),
+  parseBody,
   validateRequest(userSchema.registerUserSchema),
   authController.register,
 );
 
 router.post(
   '/login',
-  auth(USER_ROLE.USER),
-  validateRequest(userSchema.loginUserSchema),
+  // validateRequest(userSchema.loginUserSchema),
   authController.login,
 );
 

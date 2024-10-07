@@ -10,6 +10,7 @@ const updateUserDB = async (
   payload: Partial<TUser>,
   file: Express.Multer.File | undefined,
 ) => {
+  console.log(payload, 'from user service');
   const findUser = await User.findById(id);
   if (!findUser) {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found.');
@@ -18,12 +19,16 @@ const updateUserDB = async (
     throw new AppError(httpStatus.NOT_FOUND, 'User not found.');
   }
 
-  const data = JSON.parse(payload as string);
-  const deleteAbleFields = ['isVerified', 'isBlocked', 'isDeleted', 'role'];
-  deleteAbleFields?.map((field) => delete data?.[field]);
+  const deleteAbleFields: (keyof TUser)[] = [
+    'isVerified',
+    'isBlocked',
+    'isDeleted',
+    'role',
+  ];
+  deleteAbleFields?.map((field) => delete payload?.[field]);
 
   const userData = {
-    ...data,
+    ...payload,
     profilePicture: file ? file.path : findUser?.profilePicture,
   };
 
@@ -49,8 +54,9 @@ const getAllAuthorsDB = async (query: Record<string, unknown>) => {
     query,
   );
 
-  const result = await userQuery.modelQuery;
-  return result;
+  const authors = await userQuery.modelQuery;
+  const meta = await userQuery.countTotal();
+  return { authors, meta };
 };
 
 const getSingleAuthorDB = async (id: string) => {
@@ -103,6 +109,7 @@ const getPopularUsersDB = async () => {
 };
 
 const getSingleUserDB = async (id: string) => {
+  console.log(id);
   const result = await User.findById(id).select('-password');
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found.');

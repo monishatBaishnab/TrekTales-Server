@@ -32,10 +32,12 @@ const PostSchema = new mongoose_1.Schema({
     author: { type: mongoose_1.default.Types.ObjectId, ref: 'User', required: true },
     title: { type: String, required: true },
     image: { type: String, required: true },
+    shortDescription: { type: String, required: true },
     content: { type: String, required: true },
     category: { type: String, required: true },
     tags: { type: [String], default: [] },
     isPremium: { type: Boolean, default: false },
+    isFeatured: { type: Boolean, default: false },
     votes: { type: [VoteSchema], required: false },
     isDeleted: { type: Boolean, default: false },
 }, {
