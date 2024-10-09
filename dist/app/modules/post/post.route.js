@@ -20,5 +20,6 @@ router.put('/:id', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_co
 router.put('/:id/upvote', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), post_controller_1.postController.createUpVote);
 router.put('/:id/downvote', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), post_controller_1.postController.createDownVote);
 router.delete('/:id', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), post_controller_1.postController.deletePost);
+router.get('/upvotes/:authorId', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), post_controller_1.postController.getUpvotes);
 router.get('/states/all', post_controller_1.postController.getStates);
 exports.postRoutes = router;

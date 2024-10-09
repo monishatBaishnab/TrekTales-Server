@@ -100,6 +100,16 @@ const createDownVote = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
         data: states,
     });
 }));
+const getUpvotes = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const upVotes = yield post_service_1.postService.getUpvotes((_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.authorId);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Upvote Retrieved Successfully.',
+        data: upVotes,
+    });
+}));
 exports.postController = {
     getAllPost,
     getSinglePost,
@@ -109,4 +119,5 @@ exports.postController = {
     getStates,
     createUpVote,
     createDownVote,
+    getUpvotes
 };

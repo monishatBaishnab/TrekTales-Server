@@ -22,7 +22,10 @@ router.post(
   // validateRequest(userSchema.loginUserSchema),
   authController.login,
 );
-
-router.post('/change-password', authController.changePassword);
+router.get(
+  '/refetch-token',
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  authController.refetchToken,
+);
 
 export const authRouter = router;

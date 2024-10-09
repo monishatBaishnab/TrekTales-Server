@@ -89,9 +89,24 @@ const loginIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () 
     });
     return { token };
 });
-const changePasswordIntoDB = (id, password) => __awaiter(void 0, void 0, void 0, function* () { });
+const refetchTokenFromDB = (userInfo) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.default.findById({ _id: userInfo === null || userInfo === void 0 ? void 0 : userInfo._id });
+    if (!user) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found.');
+    }
+    //create user token
+    const token = jsonwebtoken_1.default.sign({
+        email: user === null || user === void 0 ? void 0 : user.email,
+        role: user === null || user === void 0 ? void 0 : user.role,
+        _id: user === null || user === void 0 ? void 0 : user._id,
+        isVerified: user === null || user === void 0 ? void 0 : user.isVerified,
+    }, config_1.default.jwt_access_secret, {
+        expiresIn: config_1.default.jwt_access_expires_in,
+    });
+    return token;
+});
 exports.authService = {
     registerIntoDB,
     loginIntoDB,
-    changePasswordIntoDB,
+    refetchTokenFromDB,
 };

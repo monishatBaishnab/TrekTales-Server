@@ -106,6 +106,16 @@ const createDownVote = catchAsync(async (req, res) => {
     data: states,
   });
 });
+const getUpvotes = catchAsync(async (req, res) => {
+  const upVotes = await postService.getUpvotes(req?.params?.authorId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Upvote Retrieved Successfully.',
+    data: upVotes,
+  });
+});
 
 export const postController = {
   getAllPost,
@@ -116,4 +126,5 @@ export const postController = {
   getStates,
   createUpVote,
   createDownVote,
+  getUpvotes
 };

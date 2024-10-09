@@ -29,7 +29,6 @@ const register = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 
 }));
 const login = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield auth_service_1.authService.loginIntoDB(req.body);
-    console.log(req.body);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.OK,
         success: true,
@@ -37,5 +36,13 @@ const login = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, 
         data: user,
     });
 }));
-const changePassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
-exports.authController = { register, login, changePassword };
+const refetchToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = yield auth_service_1.authService.refetchTokenFromDB(req === null || req === void 0 ? void 0 : req.user);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.OK,
+        success: true,
+        message: 'Token refetch success.',
+        data: token,
+    });
+}));
+exports.authController = { register, login, refetchToken };

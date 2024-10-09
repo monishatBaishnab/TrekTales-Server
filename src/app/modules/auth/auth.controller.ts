@@ -17,7 +17,7 @@ const register = catchAsync(async (req, res) => {
 });
 const login = catchAsync(async (req, res) => {
   const user = await authService.loginIntoDB(req.body);
-  console.log(req.body);
+
   sendResponse(res, {
     statusCode: OK,
     success: true,
@@ -25,6 +25,15 @@ const login = catchAsync(async (req, res) => {
     data: user,
   });
 });
-const changePassword = catchAsync(async (req, res) => {});
+const refetchToken = catchAsync(async (req, res) => {
+  const token = await authService.refetchTokenFromDB(req?.user);
 
-export const authController = { register, login, changePassword };
+  sendResponse(res, {
+    statusCode: OK,
+    success: true,
+    message: 'Token refetch success.',
+    data: token,
+  });
+});
+
+export const authController = { register, login, refetchToken };

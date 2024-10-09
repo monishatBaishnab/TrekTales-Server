@@ -6,6 +6,7 @@ import { TPost } from './post.types';
 import Post from './posts.model';
 import Comment from '../comment/comment.model';
 import console from 'console';
+import mongoose from 'mongoose';
 
 const getAllPostFromDB = async (query: Record<string, unknown>) => {
   const postQuery = new QueryBuilder(Post.find().populate('author'), query)
@@ -175,6 +176,19 @@ const createDownVoteIntoDB = async (id: string, payload: { user: string }) => {
   return post;
 };
 
+const getUpvotes = async (authorId: string) => {
+  const authorObjectId = new mongoose.Types.ObjectId(authorId);
+
+  const result = await Post.aggregate([
+    { $match: { author: authorObjectId } },
+    { $unwind: '$votes' },
+    { $match: { 'votes.vote': 'up' } },
+    { $group: { _id: null, upvoteCount: { $sum: 1 } } },
+  ]);
+
+  return result.length > 0 ? result[0].upvoteCount : 0;
+};
+
 export const postService = {
   getAllPostFromDB,
   getSinglePostFromDB,
@@ -184,4 +198,5 @@ export const postService = {
   getTodayStates,
   createDownVoteIntoDB,
   createUpVoteIntoDB,
+  getUpvotes,
 };

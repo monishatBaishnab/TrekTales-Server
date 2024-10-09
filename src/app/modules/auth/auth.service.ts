@@ -3,7 +3,7 @@ import config from '../../config';
 import AppError from '../../errors/AppError';
 import User from '../user/user.model';
 import { TUser } from '../user/user.types';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 const registerIntoDB = async (payload: TUser) => {
@@ -71,10 +71,32 @@ const loginIntoDB = async (payload: { email: string; password: string }) => {
   return { token };
 };
 
-const changePasswordIntoDB = async (id: string, password: string) => {};
+const refetchTokenFromDB = async (userInfo: JwtPayload) => {
+  const user = await User.findById({ _id: userInfo?._id });
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found.');
+  }
+
+  //create user token
+  const token = jwt.sign(
+    {
+      email: user?.email,
+      role: user?.role,
+      _id: user?._id,
+      isVerified: user?.isVerified,
+    },
+    config.jwt_access_secret as string,
+    {
+      expiresIn: config.jwt_access_expires_in,
+    },
+  );
+
+  return token;
+};
 
 export const authService = {
   registerIntoDB,
   loginIntoDB,
-  changePasswordIntoDB,
+  refetchTokenFromDB,
 };

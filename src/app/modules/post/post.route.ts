@@ -53,6 +53,12 @@ router.delete(
   postController.deletePost,
 );
 
+router.get(
+  '/upvotes/:authorId',
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  postController.getUpvotes,
+);
+
 router.get('/states/all', postController.getStates);
 
 export const postRoutes = router;

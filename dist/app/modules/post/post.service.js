@@ -20,6 +20,7 @@ const user_model_1 = __importDefault(require("../user/user.model"));
 const posts_model_1 = __importDefault(require("./posts.model"));
 const comment_model_1 = __importDefault(require("../comment/comment.model"));
 const console_1 = __importDefault(require("console"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const getAllPostFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const postQuery = new QueryBuilder_1.default(posts_model_1.default.find().populate('author'), query)
         .search(['title', 'category'])
@@ -151,6 +152,16 @@ const createDownVoteIntoDB = (id, payload) => __awaiter(void 0, void 0, void 0, 
     console_1.default.log(post);
     return post;
 });
+const getUpvotes = (authorId) => __awaiter(void 0, void 0, void 0, function* () {
+    const authorObjectId = new mongoose_1.default.Types.ObjectId(authorId);
+    const result = yield posts_model_1.default.aggregate([
+        { $match: { author: authorObjectId } },
+        { $unwind: '$votes' },
+        { $match: { 'votes.vote': 'up' } },
+        { $group: { _id: null, upvoteCount: { $sum: 1 } } },
+    ]);
+    return result.length > 0 ? result[0].upvoteCount : 0;
+});
 exports.postService = {
     getAllPostFromDB,
     getSinglePostFromDB,
@@ -160,4 +171,5 @@ exports.postService = {
     getTodayStates,
     createDownVoteIntoDB,
     createUpVoteIntoDB,
+    getUpvotes,
 };
