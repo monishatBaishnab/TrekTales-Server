@@ -16,7 +16,8 @@ const getAllPost = catchAsync(async (req, res) => {
 
 const getSinglePost = catchAsync(async (req, res) => {
   const { id } = req?.params;
-  const post = await postService.getSinglePostFromDB(id);
+  // console.log(req);
+  const post = await postService.getSinglePostFromDB(id, req?.user?.isVerified);
 
   sendResponse(res, {
     success: true,

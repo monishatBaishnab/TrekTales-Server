@@ -31,7 +31,7 @@ const createPaymentIntoDB = (payload) => __awaiter(void 0, void 0, void 0, funct
     const paymentData = {
         trans_id,
         user: payload === null || payload === void 0 ? void 0 : payload.user,
-        amount: payload === null || payload === void 0 ? void 0 : payload.amount,
+        amount: 1050,
     };
     yield payment_model_1.default.create(paymentData);
     const paymentInfo = {
@@ -50,9 +50,11 @@ const successPaymentIntoAmarpay = (trans_id) => __awaiter(void 0, void 0, void 0
     const filePath = path_1.default.join(__dirname, '../../views/success.html');
     try {
         const data = yield fs_1.promises.readFile(filePath, 'utf8');
+        console.log(trans_id);
         const checkPayment = yield axios_1.default.get(`https://sandbox.aamarpay.com/api/v1/trxcheck/request.php?request_id=${trans_id}&store_id=${config_1.default.store_id}&signature_key=${config_1.default.signature_key}&type=json`);
         if (((_a = checkPayment === null || checkPayment === void 0 ? void 0 : checkPayment.data) === null || _a === void 0 ? void 0 : _a.pay_status) === 'Successful') {
-            yield payment_model_1.default.updateOne({ trans_id }, { status: 'complete' });
+            const updatedPayment = yield payment_model_1.default.findOneAndUpdate({ trans_id }, { status: 'complete' }, { new: true });
+            yield user_model_1.default.findOneAndUpdate({ _id: updatedPayment === null || updatedPayment === void 0 ? void 0 : updatedPayment.user }, { isVerified: true });
         }
         return data;
     }

@@ -29,7 +29,6 @@ const createPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
 const successPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { trans_id } = req === null || req === void 0 ? void 0 : req.query;
     const result = yield payment_service_1.paymentService.successPaymentIntoAmarpay(trans_id);
-    console.log(result);
     res.send(result);
 }));
 const failedPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

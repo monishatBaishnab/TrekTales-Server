@@ -8,7 +8,6 @@ import Comment from '../comment/comment.model';
 import console from 'console';
 
 const getAllPostFromDB = async (query: Record<string, unknown>) => {
- 
   const postQuery = new QueryBuilder(Post.find().populate('author'), query)
     .search(['title', 'category'])
     .filter()
@@ -21,8 +20,14 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
   return { posts, meta };
 };
 
-const getSinglePostFromDB = async (id: string) => {
+const getSinglePostFromDB = async (id: string, isUserVerified: string) => {
   const result = await Post.findById(id).populate('author');
+  if (result?.isPremium && !isUserVerified) {
+    return {
+      isPremium: true,
+    };
+  }
+
   return result;
 };
 

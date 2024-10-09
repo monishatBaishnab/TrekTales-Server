@@ -20,8 +20,9 @@ const getAllCommentsFromDB = async (query: Record<string, unknown>) => {
     .sort()
     .filter();
 
-  const result = await commentQuery.modelQuery;
-  return result;
+  const comments = await commentQuery.modelQuery;
+  const meta = await commentQuery.countTotal();
+  return { comments, meta };
 };
 
 const getCommentsByPostFromDB = async (postId: string) => {

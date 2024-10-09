@@ -12,7 +12,7 @@ const registerIntoDB = async (payload: TUser) => {
   if (existsUser) {
     throw new AppError(httpStatus.CONFLICT, 'User already exists.');
   }
-  console.log(payload);
+
   //create new user
   const newUser = await User.create(payload);
   if (!newUser) {
@@ -21,7 +21,12 @@ const registerIntoDB = async (payload: TUser) => {
 
   //create user token
   const token = jwt.sign(
-    { email: newUser?.email, role: newUser?.role, _id: newUser?._id },
+    {
+      email: newUser?.email,
+      role: newUser?.role,
+      _id: newUser?._id,
+      isVerified: newUser?.isVerified,
+    },
     config.jwt_access_secret as string,
     {
       expiresIn: config.jwt_access_expires_in,
@@ -29,7 +34,6 @@ const registerIntoDB = async (payload: TUser) => {
   );
   //return the generated token
   return { token };
-  return {};
 };
 
 const loginIntoDB = async (payload: { email: string; password: string }) => {
@@ -47,12 +51,17 @@ const loginIntoDB = async (payload: { email: string; password: string }) => {
   if (!validatePassword) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Password not matched');
   }
-
   const user = await User.findOne({ email: payload?.email });
+  console.log(user);
 
   //create user token
   const token = jwt.sign(
-    { email: user?.email, role: user?.role, _id: user?._id },
+    {
+      email: user?.email,
+      role: user?.role,
+      _id: user?._id,
+      isVerified: user?.isVerified,
+    },
     config.jwt_access_secret as string,
     {
       expiresIn: config.jwt_access_expires_in,

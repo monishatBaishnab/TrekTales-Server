@@ -11,7 +11,7 @@ const comment_schema_1 = require("./comment.schema");
 const auth_1 = __importDefault(require("../../middlewares/auth"));
 const user_constants_1 = require("../user/user.constants");
 const router = (0, express_1.Router)();
-router.get('/', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN), comment_controller_1.commentController.getALlComments);
+router.get('/', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), comment_controller_1.commentController.getALlComments);
 router.get('/posts/:postId', comment_controller_1.commentController.getCommentsByPost);
 router.post('/', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), (0, validateRequest_1.default)(comment_schema_1.commentSchemas.createCommentSchema), comment_controller_1.commentController.createComment);
 router.put('/:id', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), (0, validateRequest_1.default)(comment_schema_1.commentSchemas.updateCommentSchema), comment_controller_1.commentController.updateComment);

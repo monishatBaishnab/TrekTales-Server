@@ -21,7 +21,6 @@ const user_model_1 = __importDefault(require("../modules/user/user.model"));
 const auth = (...requiredRoles) => {
     return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         const token = req.headers.authorization;
-        console.log(token);
         // checking if the token is missing
         if (!token) {
             throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, 'You are not authorized!');
@@ -40,6 +39,7 @@ const auth = (...requiredRoles) => {
         if (requiredRoles && !requiredRoles.includes(role.toUpperCase())) {
             throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, 'You are not authorized');
         }
+        console.log(decoded);
         req.user = decoded;
         next();
     }));

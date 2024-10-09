@@ -48,19 +48,22 @@ const registerIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* 
     if (existsUser) {
         throw new AppError_1.default(http_status_1.default.CONFLICT, 'User already exists.');
     }
-    console.log(payload);
     //create new user
     const newUser = yield user_model_1.default.create(payload);
     if (!newUser) {
         throw new AppError_1.default(http_status_1.BAD_REQUEST, 'User creation failed.');
     }
     //create user token
-    const token = jsonwebtoken_1.default.sign({ email: newUser === null || newUser === void 0 ? void 0 : newUser.email, role: newUser === null || newUser === void 0 ? void 0 : newUser.role, _id: newUser === null || newUser === void 0 ? void 0 : newUser._id }, config_1.default.jwt_access_secret, {
+    const token = jsonwebtoken_1.default.sign({
+        email: newUser === null || newUser === void 0 ? void 0 : newUser.email,
+        role: newUser === null || newUser === void 0 ? void 0 : newUser.role,
+        _id: newUser === null || newUser === void 0 ? void 0 : newUser._id,
+        isVerified: newUser === null || newUser === void 0 ? void 0 : newUser.isVerified,
+    }, config_1.default.jwt_access_secret, {
         expiresIn: config_1.default.jwt_access_expires_in,
     });
     //return the generated token
     return { token };
-    return {};
 });
 const loginIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     //check user already exists or not
@@ -74,8 +77,14 @@ const loginIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () 
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Password not matched');
     }
     const user = yield user_model_1.default.findOne({ email: payload === null || payload === void 0 ? void 0 : payload.email });
+    console.log(user);
     //create user token
-    const token = jsonwebtoken_1.default.sign({ email: user === null || user === void 0 ? void 0 : user.email, role: user === null || user === void 0 ? void 0 : user.role, _id: user === null || user === void 0 ? void 0 : user._id }, config_1.default.jwt_access_secret, {
+    const token = jsonwebtoken_1.default.sign({
+        email: user === null || user === void 0 ? void 0 : user.email,
+        role: user === null || user === void 0 ? void 0 : user.role,
+        _id: user === null || user === void 0 ? void 0 : user._id,
+        isVerified: user === null || user === void 0 ? void 0 : user.isVerified,
+    }, config_1.default.jwt_access_secret, {
         expiresIn: config_1.default.jwt_access_expires_in,
     });
     return { token };

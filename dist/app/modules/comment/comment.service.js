@@ -29,8 +29,9 @@ const getAllCommentsFromDB = (query) => __awaiter(void 0, void 0, void 0, functi
     }), query)
         .sort()
         .filter();
-    const result = yield commentQuery.modelQuery;
-    return result;
+    const comments = yield commentQuery.modelQuery;
+    const meta = yield commentQuery.countTotal();
+    return { comments, meta };
 });
 const getCommentsByPostFromDB = (postId) => __awaiter(void 0, void 0, void 0, function* () {
     const comments = yield comment_model_1.default.find({

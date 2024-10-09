@@ -11,7 +11,11 @@ const router = Router();
 
 router.get('/', postController.getAllPost);
 
-router.get('/:id', postController.getSinglePost);
+router.get(
+  '/:id',
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  postController.getSinglePost,
+);
 
 router.post(
   '/',

@@ -17,7 +17,7 @@ const successPayment = catchAsync(async (req, res) => {
   const result = await paymentService.successPaymentIntoAmarpay(
     trans_id as string,
   );
-  console.log(result);
+  
   res.send(result);
 });
 const failedPayment = catchAsync(async (req, res) => {
@@ -25,6 +25,7 @@ const failedPayment = catchAsync(async (req, res) => {
   const result = await paymentService.failedPaymentIntoAmarpay(
     trans_id as string,
   );
+  
   res.send(result);
 });
 

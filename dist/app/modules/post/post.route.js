@@ -14,7 +14,7 @@ const auth_1 = __importDefault(require("../../middlewares/auth"));
 const user_constants_1 = require("../user/user.constants");
 const router = (0, express_1.Router)();
 router.get('/', post_controller_1.postController.getAllPost);
-router.get('/:id', post_controller_1.postController.getSinglePost);
+router.get('/:id', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), post_controller_1.postController.getSinglePost);
 router.post('/', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), multer_config_1.multerUpload.single('image'), parseBody_1.parseBody, (0, validateRequest_1.default)(posts_schema_1.postSchemas.createPostSchema), post_controller_1.postController.createPost);
 router.put('/:id', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), multer_config_1.multerUpload.single('image'), parseBody_1.parseBody, (0, validateRequest_1.default)(posts_schema_1.postSchemas.updatePostSchema), post_controller_1.postController.updatePost);
 router.put('/:id/upvote', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), post_controller_1.postController.createUpVote);

@@ -7,7 +7,11 @@ import { USER_ROLE } from '../user/user.constants';
 
 const router = Router();
 
-router.get('/', auth(USER_ROLE.ADMIN), commentController.getALlComments);
+router.get(
+  '/',
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  commentController.getALlComments,
+);
 
 router.get('/posts/:postId', commentController.getCommentsByPost);
 

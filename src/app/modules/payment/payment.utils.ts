@@ -14,8 +14,8 @@ export const initiatePayment = async (paymentInfo: TPaymentInfo) => {
   const result = await axios.post(config.amarpay_base_url as string, {
     store_id: config.store_id,
     signature_key: config.signature_key,
-    success_url: `http://localhost:5000/api/v1/payments/failed-payment?trans_id=${paymentInfo.trans_id}`,
-    fail_url: `http://localhost:5000/api/v1/payments/success-payment?trans_id=${paymentInfo.trans_id}`,
+    success_url: `http://localhost:5000/api/v1/payments/success-payment?trans_id=${paymentInfo.trans_id}`,
+    fail_url: `http://localhost:5000/api/v1/payments/failed-payment?trans_id=${paymentInfo.trans_id}`,
     cancel_url: `http://localhost:5000`,
     tran_id: paymentInfo.trans_id,
     amount: paymentInfo.amount,

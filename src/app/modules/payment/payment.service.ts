@@ -18,7 +18,7 @@ const createPaymentIntoDB = async (payload: TPayment) => {
   const paymentData = {
     trans_id,
     user: payload?.user,
-    amount: payload?.amount,
+    amount: 1050,
   };
 
   await Payment.create(paymentData);
@@ -42,11 +42,21 @@ const successPaymentIntoAmarpay = async (trans_id: string) => {
 
   try {
     const data = await fs.readFile(filePath, 'utf8');
+    console.log(trans_id);
     const checkPayment = await axios.get(
       `https://sandbox.aamarpay.com/api/v1/trxcheck/request.php?request_id=${trans_id}&store_id=${config.store_id}&signature_key=${config.signature_key}&type=json`,
     );
+
     if (checkPayment?.data?.pay_status === 'Successful') {
-      await Payment.updateOne({ trans_id }, { status: 'complete' });
+      const updatedPayment = await Payment.findOneAndUpdate(
+        { trans_id },
+        { status: 'complete' },
+        { new: true },
+      );
+      await User.findOneAndUpdate(
+        { _id: updatedPayment?.user },
+        { isVerified: true },
+      );
     }
 
     return data;
