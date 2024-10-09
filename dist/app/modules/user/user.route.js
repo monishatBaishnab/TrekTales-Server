@@ -19,4 +19,5 @@ router.get('/authors/:id', user_controller_1.userController.getSingleAuthor);
 router.get('/authors', user_controller_1.userController.getAllAuthors);
 router.get('/popular-authors', user_controller_1.userController.getPopularUsers);
 router.get('/:id', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), user_controller_1.userController.getSingleUser);
+router.post('/follow', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), user_controller_1.userController.createFollower);
 exports.userRoutes = router;

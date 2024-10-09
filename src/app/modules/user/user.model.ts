@@ -14,7 +14,7 @@ const UserSchema: Schema = new Schema<TUser>(
     isBlocked: { type: Boolean, default: false },
     socialLinks: { type: Map, of: String },
     dateOfBirth: { type: Date },
-    interests: { type: [String] },
+    followers: [{ type: Schema.Types.ObjectId, ref: 'User', default:[] }],
     isDeleted: { type: Boolean, default: false },
   },
   {

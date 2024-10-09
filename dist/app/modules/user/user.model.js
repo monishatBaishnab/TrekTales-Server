@@ -26,7 +26,7 @@ const UserSchema = new mongoose_1.Schema({
     isBlocked: { type: Boolean, default: false },
     socialLinks: { type: Map, of: String },
     dateOfBirth: { type: Date },
-    interests: { type: [String] },
+    followers: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'User', default: [] }],
     isDeleted: { type: Boolean, default: false },
 }, {
     timestamps: true,

@@ -13,7 +13,14 @@ const http_status_1 = require("http-status");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
-app.use((0, cors_1.default)({ credentials: true, origin: ['http://localhost:3000'] }));
+app.use((0, cors_1.default)({
+    credentials: true,
+    origin: [
+        'https://trek-tales-client.vercel.app',
+        'http://localhost:3000',
+        'https://trek-tales-client-h1lo9spxj-monishats-projects.vercel.app',
+    ],
+}));
 app.get('/', (req, res) => {
     res.json({
         success: true,

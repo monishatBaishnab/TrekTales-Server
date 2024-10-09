@@ -9,7 +9,16 @@ const app: Application = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: ['http://localhost:3000'] }));
+app.use(
+  cors({
+    credentials: true,
+    origin: [
+      'https://trek-tales-client.vercel.app',
+      'http://localhost:3000',
+      'https://trek-tales-client-h1lo9spxj-monishats-projects.vercel.app',
+    ],
+  }),
+);
 
 app.get('/', (req: Request, res: Response) => {
   res.json({

@@ -4,6 +4,7 @@ import User from './user.model';
 import { TUser } from './user.types';
 import QueryBuilder from '../../builder/QueryBuilder';
 import Post from '../post/posts.model';
+import { Types } from 'mongoose';
 
 const updateUserDB = async (
   id: string,
@@ -110,7 +111,9 @@ const getPopularUsersDB = async () => {
 
 const getSingleUserDB = async (id: string) => {
   console.log(id);
-  const result = await User.findById(id).select('-password');
+  const result = await User.findById(id)
+    .populate({ path: 'followers', select: '-password' })
+    .select('-password');
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found.');
   }
@@ -120,6 +123,23 @@ const getSingleUserDB = async (id: string) => {
   return result;
 };
 
+const followAuthorInDB = async (
+  authorId: string,
+  followerId: Types.ObjectId,
+) => {
+  const author = await User.findByIdAndUpdate(
+    authorId,
+    { $addToSet: { followers: followerId } }, // Add follower only if not already present
+    { new: true }, // Return the updated document
+  );
+
+  if (!author) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Author not found.');
+  }
+
+  return { author: author?._id };
+};
+
 export const userServices = {
   updateUserDB,
   getAllUsersDB,
@@ -127,4 +147,5 @@ export const userServices = {
   getPopularUsersDB,
   getSingleUserDB,
   getSingleAuthorDB,
+  followAuthorInDB,
 };

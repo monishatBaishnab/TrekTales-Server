@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { userServices } from './user.service';
+import { Types } from 'mongoose';
 
 const updateUser = catchAsync(async (req, res) => {
   const result = await userServices.updateUserDB(
@@ -73,6 +74,21 @@ const getSingleUser = catchAsync(async (req, res) => {
   });
 });
 
+const createFollower = catchAsync(async (req, res) => {
+  const { author } = req?.body;
+  const result = await userServices.followAuthorInDB(
+    author as string,
+    req?.user?._id as Types.ObjectId,
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    data: result,
+    message: 'Follow added successfully.',
+  });
+});
+
 export const userController = {
   updateUser,
   getAllUsers,
@@ -80,4 +96,5 @@ export const userController = {
   getSingleUser,
   getAllAuthors,
   getSingleAuthor,
+  createFollower
 };

@@ -8,6 +8,7 @@ import Comment from '../comment/comment.model';
 import console from 'console';
 
 const getAllPostFromDB = async (query: Record<string, unknown>) => {
+ 
   const postQuery = new QueryBuilder(Post.find().populate('author'), query)
     .search(['title', 'category'])
     .filter()

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userSchema = void 0;
+const mongoose_1 = require("mongoose");
 const zod_1 = require("zod");
 const registerUserSchema = zod_1.z.object({
     email: zod_1.z.string().email(),
@@ -13,7 +14,7 @@ const registerUserSchema = zod_1.z.object({
     isBlocked: zod_1.z.boolean().default(false).optional(),
     socialLinks: zod_1.z.record(zod_1.z.string()).optional(),
     dateOfBirth: zod_1.z.string().optional(),
-    interests: zod_1.z.array(zod_1.z.string()).optional(),
+    followers: zod_1.z.array(zod_1.z.instanceof(mongoose_1.Types.ObjectId)).optional(),
     isDeleted: zod_1.z.boolean().default(false),
 });
 const updateUserSchema = zod_1.z.object({
@@ -24,7 +25,7 @@ const updateUserSchema = zod_1.z.object({
     isBlocked: zod_1.z.boolean().default(false).optional(),
     socialLinks: zod_1.z.record(zod_1.z.string()).optional(),
     dateOfBirth: zod_1.z.string().optional(),
-    interests: zod_1.z.array(zod_1.z.string()).optional(),
+    followers: zod_1.z.array(zod_1.z.instanceof(mongoose_1.Types.ObjectId)).optional(),
     isDeleted: zod_1.z.boolean().default(false).optional(),
 });
 const loginUserSchema = zod_1.z.object({

@@ -1,3 +1,5 @@
+import { Schema, Types } from "mongoose";
+
 export type TUser = {
   email: string;
   password: string;
@@ -9,6 +11,6 @@ export type TUser = {
   isBlocked: boolean;
   socialLinks?: Record<string, string>[];
   dateOfBirth?: Date;
-  interests?: string[];
+  followers?: Types.ObjectId[];
   isDeleted: boolean;
 };

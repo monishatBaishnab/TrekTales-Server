@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { z } from 'zod';
 
 const registerUserSchema = z.object({
@@ -11,7 +12,7 @@ const registerUserSchema = z.object({
   isBlocked: z.boolean().default(false).optional(),
   socialLinks: z.record(z.string()).optional(),
   dateOfBirth: z.string().optional(),
-  interests: z.array(z.string()).optional(),
+  followers: z.array(z.instanceof(Types.ObjectId)).optional(),
   isDeleted: z.boolean().default(false),
 });
 
@@ -24,7 +25,7 @@ const updateUserSchema = z.object({
   isBlocked: z.boolean().default(false).optional(),
   socialLinks: z.record(z.string()).optional(),
   dateOfBirth: z.string().optional(),
-  interests: z.array(z.string()).optional(),
+  followers: z.array(z.instanceof(Types.ObjectId)).optional(),
   isDeleted: z.boolean().default(false).optional(),
 });
 

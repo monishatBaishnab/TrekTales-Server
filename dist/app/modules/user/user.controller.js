@@ -74,6 +74,17 @@ const getSingleUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         message: 'User retrieved successfully.',
     });
 }));
+const createFollower = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const { author } = req === null || req === void 0 ? void 0 : req.body;
+    const result = yield user_service_1.userServices.followAuthorInDB(author, (_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a._id);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        data: result,
+        message: 'Follow added successfully.',
+    });
+}));
 exports.userController = {
     updateUser,
     getAllUsers,
@@ -81,4 +92,5 @@ exports.userController = {
     getSingleUser,
     getAllAuthors,
     getSingleAuthor,
+    createFollower
 };

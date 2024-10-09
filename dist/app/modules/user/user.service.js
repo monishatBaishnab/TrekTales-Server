@@ -96,7 +96,9 @@ const getPopularUsersDB = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 const getSingleUserDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(id);
-    const result = yield user_model_1.default.findById(id).select('-password');
+    const result = yield user_model_1.default.findById(id)
+        .populate({ path: 'followers', select: '-password' })
+        .select('-password');
     if (!result) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found.');
     }
@@ -105,6 +107,14 @@ const getSingleUserDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return result;
 });
+const followAuthorInDB = (authorId, followerId) => __awaiter(void 0, void 0, void 0, function* () {
+    const author = yield user_model_1.default.findByIdAndUpdate(authorId, { $addToSet: { followers: followerId } }, // Add follower only if not already present
+    { new: true });
+    if (!author) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'Author not found.');
+    }
+    return { author: author === null || author === void 0 ? void 0 : author._id };
+});
 exports.userServices = {
     updateUserDB,
     getAllUsersDB,
@@ -112,4 +122,5 @@ exports.userServices = {
     getPopularUsersDB,
     getSingleUserDB,
     getSingleAuthorDB,
+    followAuthorInDB,
 };

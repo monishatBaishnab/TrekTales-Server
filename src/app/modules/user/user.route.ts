@@ -31,5 +31,10 @@ router.get(
   auth(USER_ROLE.ADMIN, USER_ROLE.USER),
   userController.getSingleUser,
 );
+router.post(
+  '/follow',
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  userController.createFollower,
+);
 
 export const userRoutes = router;
