@@ -43,8 +43,12 @@ router.put(
   postController.createDownVote,
 );
 
-router.delete('/:id', auth(USER_ROLE.ADMIN, USER_ROLE.USER), postController.createUpVote);
+router.delete(
+  '/:id',
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  postController.deletePost,
+);
 
-router.get('/states/all', postController.createDownVote);
+router.get('/states/all', postController.getStates);
 
 export const postRoutes = router;

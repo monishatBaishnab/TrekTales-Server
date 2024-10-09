@@ -63,10 +63,39 @@ const deleteComment = catchAsync(async (req, res) => {
   });
 });
 
+const createReply = catchAsync(async (req, res) => {
+  const { id } = req?.params;
+  const result = await commentServices.createReplyIntoDB(id, req?.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Reply Created Successfully.',
+    data: result,
+  });
+});
+const updateReply = catchAsync(async (req, res) => {
+  const { id, replyId } = req?.params;
+  const result = await commentServices.updateReplyIntoDB(
+    id,
+    replyId,
+    req?.body,
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Reply Updated Successfully.',
+    data: result,
+  });
+});
+
 export const commentController = {
   getALlComments,
   getCommentsByPost,
   createComment,
   updateComment,
   deleteComment,
+  createReply,
+  updateReply,
 };

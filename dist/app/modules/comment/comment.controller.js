@@ -65,10 +65,32 @@ const deleteComment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         data: deletedComment,
     });
 }));
+const createReply = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req === null || req === void 0 ? void 0 : req.params;
+    const result = yield comment_service_1.commentServices.createReplyIntoDB(id, req === null || req === void 0 ? void 0 : req.body);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Reply Created Successfully.',
+        data: result,
+    });
+}));
+const updateReply = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id, replyId } = req === null || req === void 0 ? void 0 : req.params;
+    const result = yield comment_service_1.commentServices.updateReplyIntoDB(id, replyId, req === null || req === void 0 ? void 0 : req.body);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Reply Updated Successfully.',
+        data: result,
+    });
+}));
 exports.commentController = {
     getALlComments,
     getCommentsByPost,
     createComment,
     updateComment,
     deleteComment,
+    createReply,
+    updateReply,
 };

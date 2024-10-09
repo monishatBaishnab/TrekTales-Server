@@ -14,7 +14,7 @@ const PostSchema: Schema = new Schema<TPost>(
     author: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
     title: { type: String, required: true },
     image: { type: String, required: true },
-    shortDescription: {type:String, required:true},
+    shortDescription: { type: String, required: true },
     content: { type: String, required: true },
     category: { type: String, required: true },
     tags: { type: [String], default: [] },
@@ -27,6 +27,16 @@ const PostSchema: Schema = new Schema<TPost>(
     timestamps: true,
   },
 );
+
+PostSchema.pre('find', async function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+PostSchema.pre('findOne', async function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
 
 const Post = mongoose.model<TPost>('Post', PostSchema);
 export default Post;

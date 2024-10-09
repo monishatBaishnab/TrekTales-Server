@@ -19,6 +19,6 @@ router.post('/', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_cons
 router.put('/:id', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), multer_config_1.multerUpload.single('image'), parseBody_1.parseBody, (0, validateRequest_1.default)(posts_schema_1.postSchemas.updatePostSchema), post_controller_1.postController.updatePost);
 router.put('/:id/upvote', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), post_controller_1.postController.createUpVote);
 router.put('/:id/downvote', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), post_controller_1.postController.createDownVote);
-router.delete('/:id', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), post_controller_1.postController.createUpVote);
-router.get('/states/all', post_controller_1.postController.createDownVote);
+router.delete('/:id', (0, auth_1.default)(user_constants_1.USER_ROLE.ADMIN, user_constants_1.USER_ROLE.USER), post_controller_1.postController.deletePost);
+router.get('/states/all', post_controller_1.postController.getStates);
 exports.postRoutes = router;

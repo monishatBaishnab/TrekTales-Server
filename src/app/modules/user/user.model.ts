@@ -33,5 +33,14 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
+UserSchema.pre('find', async function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+UserSchema.pre('findOne', async function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
 const User = model<TUser>('User', UserSchema);
 export default User;

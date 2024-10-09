@@ -25,6 +25,28 @@ router.put(
   commentController.updateComment,
 );
 
-router.delete('/:id', auth(USER_ROLE.ADMIN), commentController.deleteComment);
+router.post(
+  '/:id/replies',
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  commentController.createReply,
+);
+
+router.put(
+  '/:id/replies/:replyId',
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  commentController.updateReply,
+);
+
+router.delete(
+  '/:id/replies',
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  commentController.updateComment,
+);
+
+router.delete(
+  '/:id',
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  commentController.deleteComment,
+);
 
 export const commentRoutes = router;

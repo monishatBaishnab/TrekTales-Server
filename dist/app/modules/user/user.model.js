@@ -39,5 +39,17 @@ UserSchema.pre('save', function (next) {
         next();
     });
 });
+UserSchema.pre('find', function (next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        this.find({ isDeleted: { $ne: true } });
+        next();
+    });
+});
+UserSchema.pre('findOne', function (next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        this.find({ isDeleted: { $ne: true } });
+        next();
+    });
+});
 const User = (0, mongoose_1.model)('User', UserSchema);
 exports.default = User;
