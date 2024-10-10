@@ -19,9 +19,9 @@ const initiatePayment = (paymentInfo) => __awaiter(void 0, void 0, void 0, funct
     const result = yield axios_1.default.post(config_1.default.amarpay_base_url, {
         store_id: config_1.default.store_id,
         signature_key: config_1.default.signature_key,
-        success_url: `http://localhost:5000/api/v1/payments/success-payment?trans_id=${paymentInfo.trans_id}`,
-        fail_url: `http://localhost:5000/api/v1/payments/failed-payment?trans_id=${paymentInfo.trans_id}`,
-        cancel_url: `http://localhost:5000`,
+        success_url: `https://trek-tales-server.vercel.app/api/v1/payments/success-payment?trans_id=${paymentInfo.trans_id}`,
+        fail_url: `https://trek-tales-server.vercel.app/api/v1/payments/failed-payment?trans_id=${paymentInfo.trans_id}`,
+        cancel_url: `https://trek-tales-client.vercel.app`,
         tran_id: paymentInfo.trans_id,
         amount: paymentInfo.amount,
         currency: 'BDT',
