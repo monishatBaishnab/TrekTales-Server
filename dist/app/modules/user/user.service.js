@@ -58,7 +58,7 @@ const getAllAuthorsDB = (query) => __awaiter(void 0, void 0, void 0, function* (
     return { authors, meta };
 });
 const getSingleAuthorDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const author = yield user_model_1.default.findById(id).select('-role -isDeleted -password -isBlocked');
+    const author = yield user_model_1.default.findById(id).select('name role isVerified bio');
     const posts = yield posts_model_1.default.find({ author: id });
     return { author, posts };
 });
@@ -96,16 +96,22 @@ const getPopularUsersDB = () => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getSingleUserDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.default.findById(id)
-        .populate({ path: 'followers', select: '-password' })
+    const user = yield user_model_1.default.findById(id)
+        .populate({
+        path: 'followers',
+        select: 'profilePicture name email isVerified role dateOfBirth',
+    })
         .select('-password');
-    if (!result) {
+    if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found.');
     }
-    if ((result === null || result === void 0 ? void 0 : result.isBlocked) || (result === null || result === void 0 ? void 0 : result.isDeleted)) {
+    if ((user === null || user === void 0 ? void 0 : user.isBlocked) || (user === null || user === void 0 ? void 0 : user.isDeleted)) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not found.');
     }
-    return result;
+    const followedUsers = yield user_model_1.default.find({
+        followers: { $in: [id] },
+    }).select('profilePicture name email isVerified role dateOfBirth');
+    return { user, followedUsers: (followedUsers === null || followedUsers === void 0 ? void 0 : followedUsers.length) ? followedUsers : [] };
 });
 const followAuthorInDB = (authorId, followerId) => __awaiter(void 0, void 0, void 0, function* () {
     const author = yield user_model_1.default.findByIdAndUpdate(authorId, { $addToSet: { followers: followerId } }, // Add follower only if not already present

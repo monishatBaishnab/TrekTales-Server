@@ -6,6 +6,7 @@ import QueryBuilder from '../../builder/QueryBuilder';
 import Post from '../post/posts.model';
 import { Types } from 'mongoose';
 import { JwtPayload } from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 const updateUserDB = async (
   id: string,
@@ -74,9 +75,7 @@ const getAllAuthorsDB = async (query: Record<string, unknown>) => {
 };
 
 const getSingleAuthorDB = async (id: string) => {
-  const author = await User.findById(id).select(
-    '-role -isDeleted -password -isBlocked',
-  );
+  const author = await User.findById(id).select('name role isVerified bio');
 
   const posts = await Post.find({ author: id });
 
@@ -118,16 +117,24 @@ const getPopularUsersDB = async () => {
 };
 
 const getSingleUserDB = async (id: string) => {
-  const result = await User.findById(id)
-    .populate({ path: 'followers', select: '-password' })
+  const user = await User.findById(id)
+    .populate({
+      path: 'followers',
+      select: 'profilePicture name email isVerified role dateOfBirth',
+    })
     .select('-password');
-  if (!result) {
+  if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found.');
   }
-  if (result?.isBlocked || result?.isDeleted) {
+  if (user?.isBlocked || user?.isDeleted) {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found.');
   }
-  return result;
+
+  const followedUsers = await User.find({
+    followers: { $in: [id] },
+  }).select('profilePicture name email isVerified role dateOfBirth');
+
+  return { user, followedUsers: followedUsers?.length ? followedUsers : [] };
 };
 
 const followAuthorInDB = async (

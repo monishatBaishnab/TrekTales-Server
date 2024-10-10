@@ -82,7 +82,6 @@ const createUpVote = catchAsync(async (req, res) => {
     req?.params?.id,
     req?.body,
   );
-  console.log(req?.params?.id);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
