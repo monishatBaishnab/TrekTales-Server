@@ -52,7 +52,6 @@ const loginIntoDB = async (payload: { email: string; password: string }) => {
     throw new AppError(httpStatus.BAD_REQUEST, 'Password not matched');
   }
   const user = await User.findOne({ email: payload?.email });
-  console.log(user);
 
   //create user token
   const token = jwt.sign(

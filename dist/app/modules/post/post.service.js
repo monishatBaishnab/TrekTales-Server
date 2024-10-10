@@ -19,7 +19,6 @@ const AppError_1 = __importDefault(require("../../errors/AppError"));
 const user_model_1 = __importDefault(require("../user/user.model"));
 const posts_model_1 = __importDefault(require("./posts.model"));
 const comment_model_1 = __importDefault(require("../comment/comment.model"));
-const console_1 = __importDefault(require("console"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const getAllPostFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const postQuery = new QueryBuilder_1.default(posts_model_1.default.find().populate('author'), query)
@@ -120,7 +119,6 @@ const createUpVoteIntoDB = (id, payload) => __awaiter(void 0, void 0, void 0, fu
     // Add the upvote
     post.votes.push({ vote: 'up', user: payload.user });
     yield post.save();
-    console_1.default.log(post);
     return post;
 });
 const createDownVoteIntoDB = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -149,7 +147,6 @@ const createDownVoteIntoDB = (id, payload) => __awaiter(void 0, void 0, void 0, 
     // Add the downvote
     post.votes.push({ vote: 'down', user: payload.user });
     yield post.save();
-    console_1.default.log(post);
     return post;
 });
 const getUpvotes = (authorId) => __awaiter(void 0, void 0, void 0, function* () {

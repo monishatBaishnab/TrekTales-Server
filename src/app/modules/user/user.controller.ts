@@ -9,6 +9,7 @@ const updateUser = catchAsync(async (req, res) => {
     req?.params?.id,
     req?.body,
     req?.file,
+    req?.user
   );
 
   sendResponse(res, {

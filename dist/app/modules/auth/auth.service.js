@@ -77,7 +77,6 @@ const loginIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () 
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Password not matched');
     }
     const user = yield user_model_1.default.findOne({ email: payload === null || payload === void 0 ? void 0 : payload.email });
-    console.log(user);
     //create user token
     const token = jsonwebtoken_1.default.sign({
         email: user === null || user === void 0 ? void 0 : user.email,

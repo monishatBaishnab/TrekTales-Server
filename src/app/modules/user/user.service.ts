@@ -5,13 +5,14 @@ import { TUser } from './user.types';
 import QueryBuilder from '../../builder/QueryBuilder';
 import Post from '../post/posts.model';
 import { Types } from 'mongoose';
+import { JwtPayload } from 'jsonwebtoken';
 
 const updateUserDB = async (
   id: string,
   payload: Partial<TUser>,
   file: Express.Multer.File | undefined,
+  currentUser: JwtPayload,
 ) => {
-  console.log(payload, 'from user service');
   const findUser = await User.findById(id);
   if (!findUser) {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found.');
@@ -26,7 +27,17 @@ const updateUserDB = async (
     'isDeleted',
     'role',
   ];
-  deleteAbleFields?.map((field) => delete payload?.[field]);
+
+  for (const field of deleteAbleFields) {
+    if (field in payload) {
+      if (currentUser?.role !== 'admin') {
+        throw new AppError(
+          httpStatus.UNAUTHORIZED,
+          'Your have no access in this operation.',
+        );
+      }
+    }
+  }
 
   const userData = {
     ...payload,
@@ -41,17 +52,19 @@ const updateUserDB = async (
 };
 
 const getAllUsersDB = async (query: Record<string, unknown>) => {
-  const userQuery = new QueryBuilder(User.find().select('-password'), query);
+  const userQuery = new QueryBuilder(
+    User.find().select('-password'),
+    query,
+  ).paginate();
 
-  const result = await userQuery.modelQuery;
-  return result;
+  const users = await userQuery.modelQuery;
+  const meta = await userQuery.countTotal();
+  return { users, meta };
 };
 
 const getAllAuthorsDB = async (query: Record<string, unknown>) => {
   const userQuery = new QueryBuilder(
-    User.find({ role: { $ne: 'admin' } }).select(
-      '-role -isDeleted -password -isBlocked',
-    ),
+    User.find().select('-role -isDeleted -password -isBlocked'),
     query,
   );
 
@@ -72,11 +85,6 @@ const getSingleAuthorDB = async (id: string) => {
 
 const getPopularUsersDB = async () => {
   const result = await User.aggregate([
-    {
-      $match: {
-        role: { $ne: 'admin' },
-      },
-    },
     {
       $lookup: {
         from: 'posts',
@@ -110,7 +118,6 @@ const getPopularUsersDB = async () => {
 };
 
 const getSingleUserDB = async (id: string) => {
-  console.log(id);
   const result = await User.findById(id)
     .populate({ path: 'followers', select: '-password' })
     .select('-password');

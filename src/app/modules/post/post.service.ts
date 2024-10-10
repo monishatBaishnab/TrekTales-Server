@@ -141,7 +141,6 @@ const createUpVoteIntoDB = async (id: string, payload: { user: string }) => {
   // Add the upvote
   post.votes.push({ vote: 'up', user: payload.user });
   await post.save();
-  console.log(post);
   return post;
 };
 
@@ -172,7 +171,6 @@ const createDownVoteIntoDB = async (id: string, payload: { user: string }) => {
   // Add the downvote
   post.votes.push({ vote: 'down', user: payload.user });
   await post.save();
-  console.log(post);
   return post;
 };
 

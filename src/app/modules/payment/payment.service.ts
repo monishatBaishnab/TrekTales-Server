@@ -8,6 +8,8 @@ import config from '../../config';
 import Payment from './payment.model';
 import User from '../user/user.model';
 import { generateTransactionId, initiatePayment } from './payment.utils';
+import Post from '../post/posts.model';
+import Comment from '../comment/comment.model';
 const createPaymentIntoDB = async (payload: TPayment) => {
   const user = await User.findById({ _id: payload?.user });
   if (!user) {
@@ -42,7 +44,6 @@ const successPaymentIntoAmarpay = async (trans_id: string) => {
 
   try {
     const data = await fs.readFile(filePath, 'utf8');
-    console.log(trans_id);
     const checkPayment = await axios.get(
       `https://sandbox.aamarpay.com/api/v1/trxcheck/request.php?request_id=${trans_id}&store_id=${config.store_id}&signature_key=${config.signature_key}&type=json`,
     );
@@ -72,13 +73,91 @@ const failedPaymentIntoAmarpay = async (trans_id: string) => {
     await Payment.updateOne({ trans_id }, { status: 'pending' });
     return data;
   } catch (error) {
-    console.log(error);
     throw new AppError(Number(httpStatus[500]), 'Error reading file');
   }
+};
+
+const getPayments = async () => {
+  const startOfMonth = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    1,
+  );
+  const endOfMonth = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth() + 1,
+    1,
+  );
+
+  const data = await Payment.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $gte: startOfMonth,
+          $lt: endOfMonth,
+        },
+      },
+    },
+    {
+      $project: {
+        formattedDate: {
+          $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
+        },
+        amount: 1,
+      },
+    },
+    {
+      $group: {
+        _id: '$formattedDate',
+        totalPayments: { $sum: '$amount' },
+      },
+    },
+    {
+      $sort: { _id: 1 },
+    },
+    {
+      $project: {
+        _id: 0,
+        name: '$_id',
+        value: '$totalPayments',
+      },
+    },
+  ]);
+
+  // Fetch the total payment amount using aggregation
+  const totalPayments = await Payment.aggregate([
+    {
+      $group: {
+        _id: null,
+        totalAmount: { $sum: '$amount' },
+      },
+    },
+  ]);
+
+  // Fetch total user count using countDocuments
+  const totalUsers = await User.countDocuments({});
+
+  // Fetch total post count using countDocuments
+  const totalPosts = await Post.countDocuments({});
+
+  // Fetch total comment count using countDocuments
+  const totalComments = await Comment.countDocuments({});
+
+  // Format the result
+  const formattedSummary = {
+    totalPayments: totalPayments.length > 0 ? totalPayments[0].totalAmount : 0,
+    totalUsers,
+    totalPosts,
+    totalComments,
+    states: data,
+  };
+
+  return formattedSummary;
 };
 
 export const paymentService = {
   createPaymentIntoDB,
   successPaymentIntoAmarpay,
   failedPaymentIntoAmarpay,
+  getPayments,
 };

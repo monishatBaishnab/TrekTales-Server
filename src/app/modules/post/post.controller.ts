@@ -5,7 +5,6 @@ import { postService } from './post.service';
 
 const getAllPost = catchAsync(async (req, res) => {
   const posts = await postService.getAllPostFromDB(req?.query);
-  console.log(req?.query);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -16,7 +15,6 @@ const getAllPost = catchAsync(async (req, res) => {
 
 const getSinglePost = catchAsync(async (req, res) => {
   const { id } = req?.params;
-  // console.log(req);
   const post = await postService.getSinglePostFromDB(id, req?.user?.isVerified);
 
   sendResponse(res, {

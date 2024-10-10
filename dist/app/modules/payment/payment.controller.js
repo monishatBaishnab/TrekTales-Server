@@ -36,8 +36,18 @@ const failedPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     const result = yield payment_service_1.paymentService.failedPaymentIntoAmarpay(trans_id);
     res.send(result);
 }));
+const getPayments = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield payment_service_1.paymentService.getPayments();
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: 'Payment Retrieved Successfully.',
+        data: result,
+    });
+}));
 exports.paymentController = {
     createPayment,
     successPayment,
     failedPayment,
+    getPayments
 };

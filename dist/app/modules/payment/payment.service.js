@@ -22,6 +22,8 @@ const config_1 = __importDefault(require("../../config"));
 const payment_model_1 = __importDefault(require("./payment.model"));
 const user_model_1 = __importDefault(require("../user/user.model"));
 const payment_utils_1 = require("./payment.utils");
+const posts_model_1 = __importDefault(require("../post/posts.model"));
+const comment_model_1 = __importDefault(require("../comment/comment.model"));
 const createPaymentIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.default.findById({ _id: payload === null || payload === void 0 ? void 0 : payload.user });
     if (!user) {
@@ -50,7 +52,6 @@ const successPaymentIntoAmarpay = (trans_id) => __awaiter(void 0, void 0, void 0
     const filePath = path_1.default.join(__dirname, '../../views/success.html');
     try {
         const data = yield fs_1.promises.readFile(filePath, 'utf8');
-        console.log(trans_id);
         const checkPayment = yield axios_1.default.get(`https://sandbox.aamarpay.com/api/v1/trxcheck/request.php?request_id=${trans_id}&store_id=${config_1.default.store_id}&signature_key=${config_1.default.signature_key}&type=json`);
         if (((_a = checkPayment === null || checkPayment === void 0 ? void 0 : checkPayment.data) === null || _a === void 0 ? void 0 : _a.pay_status) === 'Successful') {
             const updatedPayment = yield payment_model_1.default.findOneAndUpdate({ trans_id }, { status: 'complete' }, { new: true });
@@ -70,12 +71,74 @@ const failedPaymentIntoAmarpay = (trans_id) => __awaiter(void 0, void 0, void 0,
         return data;
     }
     catch (error) {
-        console.log(error);
         throw new AppError_1.default(Number(http_status_1.default[500]), 'Error reading file');
     }
+});
+const getPayments = () => __awaiter(void 0, void 0, void 0, function* () {
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1);
+    const data = yield payment_model_1.default.aggregate([
+        {
+            $match: {
+                createdAt: {
+                    $gte: startOfMonth,
+                    $lt: endOfMonth,
+                },
+            },
+        },
+        {
+            $project: {
+                formattedDate: {
+                    $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
+                },
+                amount: 1,
+            },
+        },
+        {
+            $group: {
+                _id: '$formattedDate',
+                totalPayments: { $sum: '$amount' },
+            },
+        },
+        {
+            $sort: { _id: 1 },
+        },
+        {
+            $project: {
+                _id: 0,
+                name: '$_id',
+                value: '$totalPayments',
+            },
+        },
+    ]);
+    // Fetch the total payment amount using aggregation
+    const totalPayments = yield payment_model_1.default.aggregate([
+        {
+            $group: {
+                _id: null,
+                totalAmount: { $sum: '$amount' },
+            },
+        },
+    ]);
+    // Fetch total user count using countDocuments
+    const totalUsers = yield user_model_1.default.countDocuments({});
+    // Fetch total post count using countDocuments
+    const totalPosts = yield posts_model_1.default.countDocuments({});
+    // Fetch total comment count using countDocuments
+    const totalComments = yield comment_model_1.default.countDocuments({});
+    // Format the result
+    const formattedSummary = {
+        totalPayments: totalPayments.length > 0 ? totalPayments[0].totalAmount : 0,
+        totalUsers,
+        totalPosts,
+        totalComments,
+        states: data,
+    };
+    return formattedSummary;
 });
 exports.paymentService = {
     createPaymentIntoDB,
     successPaymentIntoAmarpay,
     failedPaymentIntoAmarpay,
+    getPayments,
 };
