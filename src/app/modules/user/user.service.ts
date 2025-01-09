@@ -67,15 +67,17 @@ const getAllAuthorsDB = async (query: Record<string, unknown>) => {
   const userQuery = new QueryBuilder(
     User.find().select('-role -isDeleted -password -isBlocked'),
     query,
-  );
-
+  )
+    .paginate()
+    .fields();
+  console.log(query);
   const authors = await userQuery.modelQuery;
   const meta = await userQuery.countTotal();
   return { authors, meta };
 };
 
 const getSingleAuthorDB = async (id: string) => {
-  const author = await User.findById(id).select('name role isVerified bio');
+  const author = await User.findById(id).select('-password');
 
   const posts = await Post.find({ author: id });
 

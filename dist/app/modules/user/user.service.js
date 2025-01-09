@@ -52,13 +52,16 @@ const getAllUsersDB = (query) => __awaiter(void 0, void 0, void 0, function* () 
     return { users, meta };
 });
 const getAllAuthorsDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const userQuery = new QueryBuilder_1.default(user_model_1.default.find().select('-role -isDeleted -password -isBlocked'), query);
+    const userQuery = new QueryBuilder_1.default(user_model_1.default.find().select('-role -isDeleted -password -isBlocked'), query)
+        .paginate()
+        .fields();
+    console.log(query);
     const authors = yield userQuery.modelQuery;
     const meta = yield userQuery.countTotal();
     return { authors, meta };
 });
 const getSingleAuthorDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const author = yield user_model_1.default.findById(id).select('name role isVerified bio');
+    const author = yield user_model_1.default.findById(id).select('-password');
     const posts = yield posts_model_1.default.find({ author: id });
     return { author, posts };
 });

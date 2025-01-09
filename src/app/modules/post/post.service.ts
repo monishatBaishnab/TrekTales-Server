@@ -21,13 +21,13 @@ const getAllPostFromDB = async (query: Record<string, unknown>) => {
   return { posts, meta };
 };
 
-const getSinglePostFromDB = async (id: string, isUserVerified: string) => {
+const getSinglePostFromDB = async (id: string) => {
   const result = await Post.findById(id).populate('author');
-  if (result?.isPremium && !isUserVerified) {
-    return {
-      isPremium: true,
-    };
-  }
+  // if (result?.isPremium) {
+  //   return {
+  //     isPremium: true,
+  //   };
+  // }
 
   return result;
 };

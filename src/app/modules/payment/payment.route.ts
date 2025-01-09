@@ -4,12 +4,14 @@ import { USER_ROLE } from '../user/user.constants';
 import auth from '../../middlewares/auth';
 
 const router = Router();
-  router.get('/states', paymentController?.getPayments)
+router.get('/states', paymentController?.getPayments);
+
 router.post(
   '/create-payment',
   auth(USER_ROLE.ADMIN, USER_ROLE.USER),
   paymentController.createPayment,
 );
+
 router.post('/success-payment', paymentController.successPayment);
 router.post('/failed-payment', paymentController.failedPayment);
 

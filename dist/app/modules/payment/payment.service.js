@@ -78,14 +78,14 @@ const getPayments = () => __awaiter(void 0, void 0, void 0, function* () {
     const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
     const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1);
     const data = yield payment_model_1.default.aggregate([
-        {
-            $match: {
-                createdAt: {
-                    $gte: startOfMonth,
-                    $lt: endOfMonth,
-                },
-            },
-        },
+        // {
+        //   $match: {
+        //     createdAt: {
+        //       $gte: startOfMonth,
+        //       $lt: endOfMonth,
+        //     },
+        //   },
+        // },
         {
             $project: {
                 formattedDate: {

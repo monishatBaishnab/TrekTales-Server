@@ -9,7 +9,7 @@ const globalErrorHandler = (err, req, res, next) => {
     const error = (_b = err === null || err === void 0 ? void 0 : err.message) !== null && _b !== void 0 ? _b : '';
     console.log(err);
     //setting default values
-    return res.status(statusCode).json({
+    return res.status(statusCode).send({
         success,
         statusCode,
         message,

@@ -8,7 +8,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   const error = err?.message ?? '';
   console.log(err);
   //setting default values
-  return res.status(statusCode).json({
+  return res.status(statusCode).send({
     success,
     statusCode,
     message,

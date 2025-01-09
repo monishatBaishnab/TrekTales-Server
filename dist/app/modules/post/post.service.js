@@ -31,13 +31,13 @@ const getAllPostFromDB = (query) => __awaiter(void 0, void 0, void 0, function* 
     const meta = yield postQuery.countTotal();
     return { posts, meta };
 });
-const getSinglePostFromDB = (id, isUserVerified) => __awaiter(void 0, void 0, void 0, function* () {
+const getSinglePostFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield posts_model_1.default.findById(id).populate('author');
-    if ((result === null || result === void 0 ? void 0 : result.isPremium) && !isUserVerified) {
-        return {
-            isPremium: true,
-        };
-    }
+    // if (result?.isPremium) {
+    //   return {
+    //     isPremium: true,
+    //   };
+    // }
     return result;
 });
 const createPostIntoDB = (payload, image) => __awaiter(void 0, void 0, void 0, function* () {

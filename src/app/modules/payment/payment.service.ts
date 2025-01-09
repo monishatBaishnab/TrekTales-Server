@@ -90,14 +90,14 @@ const getPayments = async () => {
   );
 
   const data = await Payment.aggregate([
-    {
-      $match: {
-        createdAt: {
-          $gte: startOfMonth,
-          $lt: endOfMonth,
-        },
-      },
-    },
+    // {
+    //   $match: {
+    //     createdAt: {
+    //       $gte: startOfMonth,
+    //       $lt: endOfMonth,
+    //     },
+    //   },
+    // },
     {
       $project: {
         formattedDate: {

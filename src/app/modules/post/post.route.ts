@@ -13,7 +13,7 @@ router.get('/', postController.getAllPost);
 
 router.get(
   '/:id',
-  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  // auth(USER_ROLE.ADMIN, USER_ROLE.USER),
   postController.getSinglePost,
 );
 
